@@ -1,0 +1,181 @@
+.header{
+  text-align: center;
+  background-color:#eeffee;
+  width:100%;
+  position: fixed;
+  height:60px;
+  top: 0;
+  left:0;
+  z-index: 10;
+  opacity:0.8;
+}
+@media screen and (max-width:767px){
+  .header{
+    height:30px;
+  }
+}
+.title {
+    color: #134d00;
+    margin-top:0px;
+    margin-bottom:-20px;
+    font-size:30px;
+}
+@media screen and (max-width:767px){
+  .title{
+    font-size:15px;
+    margin-bottom:-12px
+  }
+}
+.top-1 p{
+    padding-bottom:5px;
+    margin-bottom:0px;
+    font-size:13px;
+}
+@media screen and (max-width:767px){
+  .top-1 p{
+    font-size:8px;
+  }
+}
+
+body{
+  margin:0 auto;
+  box-sizing: border-box;
+  margin:0px auto;
+  background-color:#ddffdd;
+}
+.main-1{
+  max-width: 900px;
+  width:100%;
+  margin:0px auto;
+  padding-top:70px;
+}
+
+.contents-menu{
+  width:50%;
+  float:left;
+}
+@media screen and (max-width:767px){
+  .contents-menu{
+    width:30%;
+  }
+}
+.contents{
+  text-align:center;
+  width:50%;
+  position:relative;
+  float:left;
+}
+@media screen and (max-width:767px){
+  .contents{
+    width:100%;
+  }
+}
+.contents-li{
+  opacity:0.5;
+}
+.contents-icon{
+  width:70%;
+  margin:0px;
+}
+
+.contents p{
+  writing-mode: vertical-rl;
+  color:white;
+}
+
+@media screen and (max-width:767px){
+  .tanka{
+    font-size:4vw;
+  }
+  .twitter{
+    font-size: 3.5vw;
+  }
+  .main-2{
+    width:70%;
+  }
+  .eisou{
+    font-size: 1.5vw;
+  }
+  .syutten{
+    font-size: 1.1vw;
+  }
+}
+@media screen and (min-width:768px) and (max-width:900px){
+  .tanka{
+    font-size: 3.2vw;
+  }
+  .twitter{
+    font-size: 2.7vw;
+  }
+  .main-2{
+    width:50%;
+  }
+  .eisou{
+    font-size: 1.3vw;
+  }
+  .syutten{
+    font-size: 1.1vw;
+  }
+}
+@media screen and (min-width:901px){
+  .tanka{
+    font-size: 29px;
+  }
+  .twitter{
+    font-size: 25px;
+  }
+  .main-2{
+    width:50%;
+  }
+  .eisou{
+    font-size: 12px;
+  }
+  .syutten{
+    font-size: 10px;
+  }
+}
+
+
+.tanka{
+  position: absolute;
+  top:55%;
+  left:48%;
+  margin:0;
+  transform: translate(-50%,-50%);
+}
+
+.twitter{
+  position: absolute;
+  top:40%;
+  left:48%;
+  margin:0;
+  transform: translate(-50%,-23%);
+}
+.contents-li:hover{
+  opacity:1;
+}
+.main-2{
+  float:left;
+  text-align:left;
+  margin:0px;
+  background-color: #eeffee;
+  opacity:0.8;
+}
+.main-2 p{
+  opacity:1;
+}
+.eisou-li{
+  padding-left: 2vw;
+  padding-top: 1vw;
+}
+.eisou{
+  margin-bottom:0.2vw;
+}
+.syutten{
+  margin-top:0.2vw;
+  padding-left: 1vw;
+}
+
+.clear{
+  clear:left;
+}
