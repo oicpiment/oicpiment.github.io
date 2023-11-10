@@ -1,0 +1,197 @@
+<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>QR読み取り・デコード</title>
+  <script src="./jsQR.js"></script>
+  <script src="./jquery-2.2.4-min.js"></script>
+
+<!-----CSS----------------------------------------------------------------->
+<style>
+
+html{
+      font-size: 62.5%;
+      }
+
+body{
+      width:80%;
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: calc(125% + 0.5vw);
+
+}
+
+td{
+      padding-bottom: 10px;
+      vertical-align: top;
+      border:1px  solid #DDD;
+}
+
+table{
+  display: block;
+}
+tr{
+}
+td{
+}
+
+button{
+  display: block;
+  width:80%;
+}
+
+</style>
+</head>
+
+<!-----HTML---------------------------------------------------------------->
+<body>
+<h1>合計金額：<span id="result">0</span>円</h1><br>
+<button  onclick="reset();">リセット</button><br>
+<table>
+ <tbody>
+    <tr>
+      <td  width="55%">半夏生の本 5</td>
+      <td  align="center">600円</td>
+      <td  id="Qty1" width="15%" align="center">0</td>
+      <td align="center" width="10%"><button  id="plus1">+</button></td>
+      <td align="center" width="10%"><button  id="minus1">-</button></td>
+    </tr>
+    <tr>
+      <td >半夏生の本 4</td>
+      <td align="center">500円</td>
+      <td id="Qty2" align="center">0</td>
+      <td align="center"><button  id="plus2">+</button></td>
+      <td align="center"><button  id="minus2">-</button></td>
+    </tr>
+    <tr>
+      <td >崩壊系列</td>
+      <td align="center">600円</td>
+      <td id="Qty3" align="center">0</td>
+      <td align="center"><button  id="plus3">+</button></td>
+      <td align="center"><button  id="minus3">-</button></td>
+    </tr>
+    <tr>
+      <td >鯉派 Vol.1</td>
+      <td align="center">800円</td>
+      <td id="Qty4" align="center">0</td>
+      <td align="center"><button  id="plus4">+</button></td>
+      <td align="center"><button  id="minus4">-</button></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+
+</html>
+
+<!-----javascript-------------------------------------------------------->
+<script language="javascript" type="text/javascript">
+//window.onload = function(){
+//  var number = document.getElementById("number");
+//  var PulsButton = document.addEventListener("Button");
+//  var Price1 = 600;
+//  var Count = 0;
+//};
+
+var result = document.getElementById("result");
+
+
+var QtyCount1 = document.getElementById("Qty1"); //querySelector('h1');
+var plusButton1 = document.getElementById("plus1");//querySelector('button');
+var minusButton1 = document.getElementById("minus1");//querySelector('button');
+var Count1 = 0;
+var price1 = 0;
+plusButton1.addEventListener('click', () => {
+    Count1 ++;
+    QtyCount1.innerHTML = Count1;
+    price1 = 600 * Count1;
+    result.innerHTML = price1+price2+price3+price4;
+});
+minusButton1.addEventListener('click', () => {
+    Count1 --;
+    QtyCount1.innerHTML = Count1;
+    price1 = 600 * Count1;
+    result.innerHTML = price1+price2+price3+price4;
+});
+
+var QtyCount2 = document.getElementById("Qty2"); //querySelector('h1');
+var plusButton2 = document.getElementById("plus2");//querySelector('button');
+var minusButton2 = document.getElementById("minus2");//querySelector('button');
+var Count2 = 0;
+var price2 = 0;
+plusButton2.addEventListener('click', () => {
+    Count2 ++;
+    QtyCount2.innerHTML = Count2;
+    price2 = 500 * Count2;
+    result.innerHTML = price1+price2+price3+price4;
+});
+minusButton2.addEventListener('click', () => {
+    Count2 --;
+    QtyCount2.innerHTML = Count2;
+    price2 = 500 * Count2;
+    result.innerHTML = price1+price2+price3+price4;
+});
+
+var QtyCount3 = document.getElementById("Qty3"); //querySelector('h1');
+var plusButton3 = document.getElementById("plus3");//querySelector('button');
+var minusButton3 = document.getElementById("minus3");//querySelector('button');
+var Count3 = 0;
+var price3 = 0;
+plusButton3.addEventListener('click', () => {
+    Count3 ++;
+    QtyCount3.innerHTML = Count3;
+    price3 = 600 * Count3;
+    result.innerHTML = price1+price2+price3+price4;
+});
+minusButton3.addEventListener('click', () => {
+    Count3 --;
+    QtyCount3.innerHTML = Count3;
+    price3 = 600 * Count2;
+    result.innerHTML = price1+price2+price3+price4;
+});
+
+var QtyCount4 = document.getElementById("Qty4"); //querySelector('h1');
+var plusButton4 = document.getElementById("plus4");//querySelector('button');
+var minusButton4 = document.getElementById("minus4");//querySelector('button');
+var Count4 = 0;
+var price4 = 0;
+plusButton4.addEventListener('click', () => {
+    Count4 ++;
+    QtyCount4.innerHTML = Count4;
+    price4 = 800 * Count4;
+    result.innerHTML = price1+price2+price3+price4;
+});
+minusButton4.addEventListener('click', () => {
+    Count4 --;
+    QtyCount4.innerHTML = Count4;
+    price4 = 800 * Count4;
+    result.innerHTML = price1+price2+price3+price4;
+});
+
+
+function reset(){
+  Count1 = 0;
+  Count2 = 0;
+  Count3 = 0;
+  Count4 = 0;
+  QtyCount1.innerHTML = Count1;
+  QtyCount2.innerHTML = Count2;
+  QtyCount3.innerHTML = Count3;
+  QtyCount4.innerHTML = Count4;
+  price1 = 600 * Count1;
+  price2 = 500 * Count2;
+  price3 = 600 * Count3;
+  price4 = 800 * Count4;
+  result.innerHTML = price1+price2+price3+price4;
+};
+
+
+
+
+
+
+</script>
