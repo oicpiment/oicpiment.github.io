@@ -90,6 +90,9 @@ body{
   .twitter{
     font-size: 3.5vw;
   }
+  .mojicode{
+    font-size: 3.5vw;
+  }
 }
 @media screen and (max-width:900px){
   .tanka{
@@ -98,12 +101,18 @@ body{
   .twitter{
     font-size: 2.7vw;
   }
+  .mojicode{
+    font-size: 2.7vw;
+  }
 }
 @media screen and (min-width:901px){
   .tanka{
     font-size: 29px;
   }
   .twitter{
+    font-size: 25px;
+  }
+  .mojicode{
     font-size: 25px;
   }
 }
@@ -118,6 +127,13 @@ body{
 }
 
 .twitter{
+  position: absolute;
+  top:40%;
+  left:48%;
+  margin:0;
+  transform: translate(-50%,-23%);
+}
+.mojicode{
   position: absolute;
   top:40%;
   left:48%;
