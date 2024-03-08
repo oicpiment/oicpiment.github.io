@@ -31,7 +31,7 @@ document.getElementById("input").addEventListener('change', (e) => {
 	if(input_text == unicodeArray2_str){
 		document.getElementById("output").innerText = "○ 問題なし";
 	}else{
-		document.getElementById("output").innerText = "× 文字化け";
+		document.getElementById("output").innerText = "× マッピング外文字あり";
 	};
 
 }, false);
