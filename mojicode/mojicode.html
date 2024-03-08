@@ -1,0 +1,47 @@
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<script src="encoding.js"></script>
+<script src="encodetool.js"></script>
+<style>
+body{
+	margin: auto 5%;
+}
+</style>
+</head>
+<!-------------------------------------------------->
+
+<body>
+
+<h1>Shift-JIS⇔unicode マッピング判定ツール</h1><br>
+↓にテキストを入力してEnter<br>
+<input type="text" id="input" value="テキストを入力⑳"><br>
+<br>
+<h2>判定：<span id="output"></span></h2>
+-------------------------------------------<br>
+【参考】<br>
+　①入力された文字：<span id="output_1"></span><br>
+　　└unicode：<span id="output_2"></span><br>
+<br>
+　②①のunicodeをShift-JISに変換<br>
+　　└Shift-JIS：<span id="output_3"></span><br>
+　　└デコード：<span id="output_4"></span><br>
+　　　　　　　※仕様上、うまく表示されない<br><br>
+　③②をunicodeに変換　<span id="output_5">剝がす</span><br>
+　　└デコード：<span id="output_6"></span><br><br>
+-------------------------------------------<br>
+<br>
+※「encoding.js」を使ってunicodeにマッピング外文字の判定ができると思った
+<br>
+<br>
+<a href="https://oicpiment.github.io/">TOPへ</a>
+</body>
+
+<!-------------------------------------------------->
+
+
+
+
+
+
+
