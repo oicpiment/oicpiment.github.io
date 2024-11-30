@@ -1,48 +1,64 @@
-<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
 <!DOCTYPE html>
 <html lang="jp">
 
-  
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>計算</title>
-  <script src="./jsQR.js"></script>
-  <script src="./jquery-2.2.4-min.js"></script>
+  <title>同人誌　価格計算</title>
 
 <!-----CSS----------------------------------------------------------------->
 <style>
 
 html{
-      font-size: 62.5%;
-      }
+	font-size: 62.5%;
+}
 
 body{
-      width:80%;
-      max-width: 640px;
-      margin: 0 auto;
-      font-size: calc(125% + 0.5vw);
-
+	width:80%;
+	max-width: 640px;
+	margin: 0 auto;
+	font-size: calc(125% + 0.5vw);
 }
 
 td{
-      padding-bottom: 10px;
-      vertical-align: top;
-      border:1px  solid #DDD;
+	padding-bottom: 10px;
+	vertical-align: top;
+	border:1px  solid #DDD;
 }
 
 table{
-  display: block;
+	display: block;
+	//width: 100%;
+	table-layout: fixed;
 }
-tr{
-}
-td{
+tbody{
 }
 
 button{
-  display: block;
-  width:80%;
+	display: block;
+	width: 80%;
+	height: 80%;
+}
+
+td.title{
+	width: 50%;
+}
+td.price{
+	width: 20%;
+	text-align: center;
+}
+td.count{
+	width: 10%;
+	text-align: center;
+}
+td.button_p{
+	width: 10%;
+	text-align: center;
+}
+td.button_m{
+	width: 10%;
+	text-align: center;
 }
 
 </style>
@@ -55,32 +71,32 @@ button{
 <table>
  <tbody>
     <tr>
-      <td  width="55%">半夏生の本 5</td>
-      <td  align="center">600円</td>
-      <td  id="Qty1" width="15%" align="center">0</td>
-      <td align="center" width="10%"><button  id="plus1">+</button></td>
-      <td align="center" width="10%"><button  id="minus1">-</button></td>
+      <td class="title">半夏生の本 6</td>
+      <td class="price">500円</td>
+      <td class="count" id="Qty1">0</td>
+      <td class="button_p"><button id="plus1">+</button></td>
+      <td class="button_m"><button id="minus1">-</button></td>
     </tr>
     <tr>
-      <td >半夏生の本 4</td>
-      <td align="center">500円</td>
-      <td id="Qty2" align="center">0</td>
-      <td align="center"><button  id="plus2">+</button></td>
-      <td align="center"><button  id="minus2">-</button></td>
+      <td class="title">半夏生の本 5</td>
+      <td class="price">600円</td>
+      <td class="count" id="Qty2">0</td>
+      <td class="button_p"><button id="plus2">+</button></td>
+      <td class="button_m"><button id="minus2">-</button></td>
     </tr>
     <tr>
-      <td >崩壊系列</td>
-      <td align="center">600円</td>
-      <td id="Qty3" align="center">0</td>
-      <td align="center"><button  id="plus3">+</button></td>
-      <td align="center"><button  id="minus3">-</button></td>
+      <td class="title" >半夏生の本 4</td>
+      <td class="price" align="center">500円</td>
+      <td class="count" id="Qty3">0</td>
+      <td class="button_p"><button id="plus3">+</button></td>
+      <td class="button_m"><button id="minus3">-</button></td>
     </tr>
     <tr>
-      <td >鯉派 Vol.1</td>
-      <td align="center">800円</td>
-      <td id="Qty4" align="center">0</td>
-      <td align="center"><button  id="plus4">+</button></td>
-      <td align="center"><button  id="minus4">-</button></td>
+      <td class="title">崩壊系列NOIR</td>
+      <td class="price">600円</td>
+      <td class="count" id="Qty4">0</td>
+      <td class="button_p"><button id="plus4">+</button></td>
+      <td class="button_m"><button id="minus4">-</button></td>
     </tr>
   </tbody>
 </table>
@@ -91,108 +107,120 @@ button{
 
 <!-----javascript-------------------------------------------------------->
 <script language="javascript" type="text/javascript">
-//window.onload = function(){
-//  var number = document.getElementById("number");
-//  var PulsButton = document.addEventListener("Button");
-//  var Price1 = 600;
-//  var Count = 0;
-//};
 
+//計算結果--------------
 var result = document.getElementById("result");
 
+function result_calc(){
+	price1 = 500 * Count1;
+	price2 = 600 * Count2;
+	price3 = 500 * Count3;
+	price4 = 600 * Count4;
+	discount = 0;
+	if(Count1>0 && Count2>0){
+		if(Count1 >= Count2){
+			discount = Count2 * 100;
+		}else{
+			discount = Count1 * 100;
+		}
+	}
 
-var QtyCount1 = document.getElementById("Qty1"); //querySelector('h1');
-var plusButton1 = document.getElementById("plus1");//querySelector('button');
-var minusButton1 = document.getElementById("minus1");//querySelector('button');
+	result.innerHTML = price1+price2+price3+price4-discount;
+}
+
+
+//1冊目-----------------
+var QtyCount1 = document.getElementById("Qty1"); 
+var plusButton1 = document.getElementById("plus1");
+var minusButton1 = document.getElementById("minus1");
 var Count1 = 0;
 var price1 = 0;
+
 plusButton1.addEventListener('click', () => {
-    Count1 ++;
-    QtyCount1.innerHTML = Count1;
-    price1 = 600 * Count1;
-    result.innerHTML = price1+price2+price3+price4;
+	Count1 ++;
+	QtyCount1.innerHTML = Count1;
+	result_calc();
 });
 minusButton1.addEventListener('click', () => {
-    Count1 --;
-    QtyCount1.innerHTML = Count1;
-    price1 = 600 * Count1;
-    result.innerHTML = price1+price2+price3+price4;
+	if(Count1>0){
+		Count1 --;
+		QtyCount1.innerHTML = Count1;
+	}
+	result_calc();
 });
 
-var QtyCount2 = document.getElementById("Qty2"); //querySelector('h1');
-var plusButton2 = document.getElementById("plus2");//querySelector('button');
-var minusButton2 = document.getElementById("minus2");//querySelector('button');
+//2冊目-----------------
+var QtyCount2 = document.getElementById("Qty2"); 
+var plusButton2 = document.getElementById("plus2");
+var minusButton2 = document.getElementById("minus2");
 var Count2 = 0;
 var price2 = 0;
+
 plusButton2.addEventListener('click', () => {
-    Count2 ++;
-    QtyCount2.innerHTML = Count2;
-    price2 = 500 * Count2;
-    result.innerHTML = price1+price2+price3+price4;
+	Count2 ++;
+	QtyCount2.innerHTML = Count2;
+	result_calc();
 });
 minusButton2.addEventListener('click', () => {
-    Count2 --;
-    QtyCount2.innerHTML = Count2;
-    price2 = 500 * Count2;
-    result.innerHTML = price1+price2+price3+price4;
+	if(Count2>0){
+		Count2 --;
+		QtyCount2.innerHTML = Count2;
+	}
+	result_calc();
 });
 
-var QtyCount3 = document.getElementById("Qty3"); //querySelector('h1');
-var plusButton3 = document.getElementById("plus3");//querySelector('button');
-var minusButton3 = document.getElementById("minus3");//querySelector('button');
+//3冊目-----------------
+var QtyCount3 = document.getElementById("Qty3");
+var plusButton3 = document.getElementById("plus3");
+var minusButton3 = document.getElementById("minus3");
 var Count3 = 0;
 var price3 = 0;
+
 plusButton3.addEventListener('click', () => {
-    Count3 ++;
-    QtyCount3.innerHTML = Count3;
-    price3 = 600 * Count3;
-    result.innerHTML = price1+price2+price3+price4;
+	Count3 ++;
+	QtyCount3.innerHTML = Count3;
+	result_calc();
 });
 minusButton3.addEventListener('click', () => {
-    Count3 --;
-    QtyCount3.innerHTML = Count3;
-    price3 = 600 * Count2;
-    result.innerHTML = price1+price2+price3+price4;
+	if(Count3>0){
+		Count3 --;
+		QtyCount3.innerHTML = Count3;
+	}
+	result_calc();
 });
 
-var QtyCount4 = document.getElementById("Qty4"); //querySelector('h1');
-var plusButton4 = document.getElementById("plus4");//querySelector('button');
-var minusButton4 = document.getElementById("minus4");//querySelector('button');
+//4冊目-----------------
+var QtyCount4 = document.getElementById("Qty4");
+var plusButton4 = document.getElementById("plus4");
+var minusButton4 = document.getElementById("minus4");
 var Count4 = 0;
 var price4 = 0;
+
 plusButton4.addEventListener('click', () => {
-    Count4 ++;
-    QtyCount4.innerHTML = Count4;
-    price4 = 800 * Count4;
-    result.innerHTML = price1+price2+price3+price4;
+	Count4 ++;
+	QtyCount4.innerHTML = Count4;
+	result_calc();
 });
 minusButton4.addEventListener('click', () => {
-    Count4 --;
-    QtyCount4.innerHTML = Count4;
-    price4 = 800 * Count4;
-    result.innerHTML = price1+price2+price3+price4;
+	if(Count4>0){
+		Count4 --;
+		QtyCount4.innerHTML = Count4;
+	}
+	result_calc();
 });
 
-
+//リセット-----------------
 function reset(){
-  Count1 = 0;
-  Count2 = 0;
-  Count3 = 0;
-  Count4 = 0;
-  QtyCount1.innerHTML = Count1;
-  QtyCount2.innerHTML = Count2;
-  QtyCount3.innerHTML = Count3;
-  QtyCount4.innerHTML = Count4;
-  price1 = 600 * Count1;
-  price2 = 500 * Count2;
-  price3 = 600 * Count3;
-  price4 = 800 * Count4;
-  result.innerHTML = price1+price2+price3+price4;
+	Count1 = 0;
+	Count2 = 0;
+	Count3 = 0;
+	Count4 = 0;
+	QtyCount1.innerHTML = Count1;
+	QtyCount2.innerHTML = Count2;
+	QtyCount3.innerHTML = Count3;
+	QtyCount4.innerHTML = Count4;
+	result_calc();
 };
-
-
-
-
 
 
 </script>
