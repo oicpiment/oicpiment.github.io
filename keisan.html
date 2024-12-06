@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="jp">
 
@@ -11,7 +12,8 @@
 <style>
 
 html{
-	font-size: 62.5%;
+	//font-size: 62.5%;
+	touch-action: manipulation;
 }
 
 body{
@@ -27,43 +29,44 @@ h1{
 h6{
 	margin-top:10px;
 }
+.button_r{
+	width:100%;
+	font-size: calc(125% + 0.5vw);
+}
+.row{
+	display: flex;
+	width: 100%;
+	//padding-bottom: 5px;
+}
 
-td{
-	padding-bottom: 10px;
+.col{
+	padding: 5px;
 	vertical-align: top;
 	border:1px  solid #DDD;
 }
 
-table{
-	display: block;
-	//width: 100%;
-	table-layout: fixed;
-}
-tbody{
-}
-
 button{
-	display: block;
+	//display: block;
 	width: 80%;
 	height: 80%;
 }
 
-td.title{
+.title{
 	width: 50%;
 }
-td.price{
+.price{
 	width: 20%;
 	text-align: center;
 }
-td.count{
+.count{
 	width: 10%;
 	text-align: center;
 }
-td.button_p{
+.button_p{
 	width: 10%;
 	text-align: center;
 }
-td.button_m{
+.button_m{
 	width: 10%;
 	text-align: center;
 }
@@ -76,39 +79,37 @@ td.button_m{
 <h1>合計金額：<span id="result">0</span>円</h1>
 <h6>※セット割引：-<span id="result_discount">0</span>円</h6>
 <br>
-<button  onclick="reset();">リセット</button><br>
-<table>
- <tbody>
-    <tr>
-      <td class="title">半夏生の本 6</td>
-      <td class="price">500円</td>
-      <td class="count" id="Qty1">0</td>
-      <td class="button_p"><button id="plus1">+</button></td>
-      <td class="button_m"><button id="minus1">-</button></td>
-    </tr>
-    <tr>
-      <td class="title">半夏生の本 5</td>
-      <td class="price">600円</td>
-      <td class="count" id="Qty2">0</td>
-      <td class="button_p"><button id="plus2">+</button></td>
-      <td class="button_m"><button id="minus2">-</button></td>
-    </tr>
-    <tr>
-      <td class="title" >半夏生の本 4</td>
-      <td class="price" align="center">500円</td>
-      <td class="count" id="Qty3">0</td>
-      <td class="button_p"><button id="plus3">+</button></td>
-      <td class="button_m"><button id="minus3">-</button></td>
-    </tr>
-    <tr>
-      <td class="title">崩壊系列NOIR</td>
-      <td class="price">600円</td>
-      <td class="count" id="Qty4">0</td>
-      <td class="button_p"><button id="plus4">+</button></td>
-      <td class="button_m"><button id="minus4">-</button></td>
-    </tr>
-  </tbody>
-</table>
+<button class="button_r" onclick="reset();">リセット</button><br><br>
+<div class="table">
+<div class="row">
+<div class="col title">半夏生の本 6</div>
+<div class="col price">500円</div>
+<div class="col count" id="Qty1">0</div>
+<div class="col button_p"><button id="plus1">+</button></div>
+<div class="col button_m"><button id="minus1">-</button></div>
+</div>
+<div class="row">
+<div class="col title">半夏生の本 5</div>
+<div class="col price">600円</div>
+<div class="col count" id="Qty2">0</div>
+<div class="col button_p"><button id="plus2">+</button></div>
+<div class="col button_m"><button id="minus2">-</button></div>
+</div>
+<div class="row">
+<div class="col title" >半夏生の本 4</div>
+<div class="col price" align="center">500円</div>
+<div class="col count" id="Qty3">0</div>
+<div class="col button_p"><button id="plus3">+</button></div>
+<div class="col button_m"><button id="minus3">-</button></div>
+</div>
+<div class="row">
+<div class="col title">崩壊系列NOIR</div>
+<div class="col price">600円</div>
+<div class="col count" id="Qty4">0</div>
+<div class="col button_p"><button id="plus4">+</button></div>
+<div class="col button_m"><button id="minus4">-</button></div>
+</div>
+</div>
 <h6>※小池紘平の世界2：1,200円</h6>
 </body>
 
