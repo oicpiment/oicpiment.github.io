@@ -12,7 +12,6 @@
 <style>
 
 html{
-	//font-size: 62.5%;
 	touch-action: manipulation;
 }
 
@@ -20,35 +19,34 @@ body{
 	width:80%;
 	max-width: 640px;
 	margin: 0 auto;
-	font-size: calc(125% + 0.5vw);
 }
 
 h1{
+	font-size: calc(100% + 0.5vw);
 	margin-bottom: 10px;
 }
 h6{
+	font-size: calc(50% + 0.5vw);
 	margin-top:10px;
 }
 .button_r{
 	width:100%;
-	font-size: calc(125% + 0.5vw);
 }
 .row{
 	display: flex;
 	width: 100%;
-	//padding-bottom: 5px;
 }
 
 .col{
 	padding: 5px;
 	vertical-align: top;
 	border:1px  solid #DDD;
+	font-size: calc(50% + 0.5vw);
+
 }
 
 button{
-	//display: block;
 	width: 80%;
-	height: 80%;
 }
 
 .title{
@@ -109,8 +107,14 @@ button{
 <div class="col button_p"><button id="plus4">+</button></div>
 <div class="col button_m"><button id="minus4">-</button></div>
 </div>
+<div class="row">
+<div class="col title">小池紘平の世界2</div>
+<div class="col price">1,200円</div>
+<div class="col count" id="Qty5">0</div>
+<div class="col button_p"><button id="plus5">+</button></div>
+<div class="col button_m"><button id="minus5">-</button></div>
 </div>
-<h6>※小池紘平の世界2：1,200円</h6>
+</div>
 </body>
 
 </html>
@@ -127,6 +131,7 @@ function result_calc(){
 	price2 = 600 * Count2;
 	price3 = 500 * Count3;
 	price4 = 600 * Count4;
+	price5 = 1200 * Count5;
 	discount = 0;
 	if(Count1>0 && Count2>0){
 		if(Count1 >= Count2){
@@ -136,7 +141,7 @@ function result_calc(){
 		}
 	}
 
-	result.innerHTML = price1+price2+price3+price4-discount;
+	result.innerHTML = price1+price2+price3+price4+price5-discount;
 	result_discount.innerHTML = discount;
 }
 
@@ -221,16 +226,38 @@ minusButton4.addEventListener('click', () => {
 	result_calc();
 });
 
+//5冊目-----------------
+var QtyCount5 = document.getElementById("Qty5"); 
+var plusButton5 = document.getElementById("plus5");
+var minusButton5 = document.getElementById("minus5");
+var Count5 = 0;
+var price5 = 0;
+
+plusButton5.addEventListener('click', () => {
+	Count5 ++;
+	QtyCount5.innerHTML = Count5;
+	result_calc();
+});
+minusButton5.addEventListener('click', () => {
+	if(Count5>0){
+		Count5 --;
+		QtyCount5.innerHTML = Count5;
+	}
+	result_calc();
+});
+
 //リセット-----------------
 function reset(){
 	Count1 = 0;
 	Count2 = 0;
 	Count3 = 0;
 	Count4 = 0;
+	Count5 = 0;
 	QtyCount1.innerHTML = Count1;
 	QtyCount2.innerHTML = Count2;
 	QtyCount3.innerHTML = Count3;
 	QtyCount4.innerHTML = Count4;
+	QtyCount5.innerHTML = Count5;
 	result_calc();
 };
 
