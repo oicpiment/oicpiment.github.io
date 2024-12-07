@@ -19,7 +19,7 @@
 <textarea id="input" rows="10"></textarea>
 <br>
 <br>
-<a id="output" href="/keisan2.html">■計算機へ■</a>
+<a id="output" href="/keisan/keisan2.html">■計算機へ■</a>
 </body>
 
 </html>
@@ -34,7 +34,7 @@ document.getElementById("input").addEventListener("change", () => {
   while(output.match(/,/g) !=null){
      output = output.replace("\,","&title_"+param_i+"=")
      output = output.replace(",","&price_"+param_i+"=")
-     document.getElementById("output").setAttribute("href", "/keisan2.html?"+output)
+     document.getElementById("output").setAttribute("href", "/keisan/keisan2.html?"+output)
      param_i++;
   }
   console.log(input,output);
