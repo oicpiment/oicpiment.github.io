@@ -33,20 +33,6 @@
 <!---javascript-------------------------------------------------------->
 <script language="javascript" type="text/javascript">
 
-document.getElementById("input").addEventListener("change", () => {
-  var input =","+document.getElementById("input").value.replace("\n","");
-  var output =input;
-  var param_i=1;
-  while(output.match(/,/g) !=null){
-     output = output.replace("\,","&title_"+param_i+"=")
-     output = output.replace(",","&price_"+param_i+"=")
-     document.getElementById("output").setAttribute("href", "?"+output)
-     param_i++;
-  }
-  console.log(input,output);
-});
-
-
 // URLを取得
 var url = new URL(window.location.href);
 // URLSearchParamsオブジェクトを取得
