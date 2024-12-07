@@ -11,15 +11,21 @@
 
 <!---HTML---------------------------------------------------------------->
 <body>
-<h1>お会計　計算機</h1>
-<span>①↓の入力フォームに「商品名」「価格」をカンマ句切りで入力する<span><br>
-<span>※例：　歌集1,1000,イラスト集2,800</span><br>
-<span>②「■計算機へ■」のリンクより、計算機画面に移動</span><br>
+<h1>合計金額：<span id="result">0</span>円</h1>
+<h6>※セット割引：-<span id="result_discount">0</span>円</h6>
 <br>
-<textarea id="input" rows="10"></textarea>
-<br>
-<br>
-<a id="output" href="/keisan2.html">■計算機へ■</a>
+<button class="button_r" onclick="reset();">リセット</button><br><br>
+<div class="list" id="list">
+<!---
+<div class="row">
+<div class="col title">半夏生の本 6</div>
+<div class="col price">500円</div>
+<div class="col count" id="Qty1">0</div>
+<div class="col button_p"><button id="plus1" class="plus">+</button></div>
+<div class="col button_m"><button id="minus1" class="minus">-</button></div>
+</div>
+--->
+</div>
 </body>
 
 </html>
@@ -34,7 +40,7 @@ document.getElementById("input").addEventListener("change", () => {
   while(output.match(/,/g) !=null){
      output = output.replace("\,","&title_"+param_i+"=")
      output = output.replace(",","&price_"+param_i+"=")
-     document.getElementById("output").setAttribute("href", "/keisan2.html?"+output)
+     document.getElementById("output").setAttribute("href", "?"+output)
      param_i++;
   }
   console.log(input,output);
