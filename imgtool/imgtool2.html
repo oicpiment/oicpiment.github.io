@@ -455,8 +455,8 @@
 						endX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
 						endY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
 
-						var startV = Math.sqrt((startX_2-startX_1)^2+(startY_2-startY_1)^2);
-						var endV =  Math.sqrt((endX_2-endX_1)^2+(endY_2-endY_1)^2);
+						var startV = Math.sqrt((startX_2-startX_1)**2+(startY_2-startY_1)**2);
+						var endV =  Math.sqrt((endX_2-endX_1)**2+(endY_2-endY_1)**2);
 						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/start
 						if(AddCanvasArray[LayerSelect][8] <= 0){AddCanvasArray[LayerSelect][8]=0.01}
 						if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
