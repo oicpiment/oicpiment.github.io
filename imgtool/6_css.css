@@ -160,8 +160,8 @@ h2{
 }
 
 #emoji_modal{
-  position: fixed;
-  top:30%;
+  position: relative;
+  top:50%;
   left:50%;
   transform: translate(-50%, -50%);
   padding: 20px 30px;
@@ -180,6 +180,14 @@ h2{
 .emoji_button{
   width: 15%;
 }
-.emoji_modal > .emoji_button{
-  width: 10px;
+.emoji_button2{
+  width: 10%;
+}
+.emoji_button > img{
+  width:100%;
+
+}
+.emoji_button2 > img{
+  width:100%;
+
 }
