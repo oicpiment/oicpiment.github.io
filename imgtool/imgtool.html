@@ -310,9 +310,9 @@
 				document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('mousemove', onMove, false);
 				document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('mouseup', onUp, false);
 
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchstart', onDown, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchmove', onMove, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', onUp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchstart', onDown_sp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchmove', onMove_sp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', onUp_sp, false);
 
 				//document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('change', rotate, false);
 				console.log(`canvas_${LayerSelect -1}：作業終了3`)
@@ -356,8 +356,29 @@
 						dragging = true; // ドラッグ開始
 					}
 					console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+				}
+
+
+				function onDown_sp(e) {
+					e.preventDefault();
+					// キャンバスの左上端の座標を取得
+					offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+					offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+
+					console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+					//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
+					// マウスが押された座標を取得
+					startX = e.touches[0].clientX - offsetX[LayerSelect-1];
+					startY = e.touches[0].clientY - offsetY[LayerSelect-1];
+
+					// オブジェクト上の座標かどうかを判定
+					if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
+						dragging = true; // ドラッグ開始
+					}
+					console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
 
 				}
+
 
 				//ドラッグ・ドロップ
 				function onMove(e) {
@@ -379,11 +400,37 @@
 					}
 				}
 
+				function onMove_sp(e) {
+					e.preventDefault();
+					// マウスが移動した先の座標を取得
+					endX = e.touches[0].clientX - offsetX[LayerSelect-1];
+					endY = e.touches[0].clientY - offsetY[LayerSelect-1];
+					var zoom = document.getElementById(`canvas_${LayerSelect -1}`).width / document.getElementById(`canvas_${LayerSelect -1}`).clientWidth;
+					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
+					if (dragging) {
+						//console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+						objX = endX - startX;
+						objY = endY - startY;
+						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
+						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
+						drawRect();
+						startX = endX;
+						startY = endY;
+					}
+				}
+
 				function onUp(e) {
 					e.preventDefault();
 					dragging = false; // ドラッグ終了
 					console.log("終点",endX,endY)
 				}
+
+				function onUp_sp(e) {
+					e.preventDefault();
+					dragging = false; // ドラッグ終了
+					console.log("終点",endX,endY)
+				}
+
 
 				function drawRect() {
 					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
@@ -408,9 +455,9 @@
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mousemove', onMove, false);
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mouseup', onUp, false);
 
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchstart', onDown, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchmove', onMove, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', onUp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchstart', onDown_sp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchmove', onMove_sp, false);
+				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', onUp_sp, false);
 
 				//document.getElementById("angle").addEventListener( 'change' ,  rotate , false);
 				console.log("addEventListener　セット完了",flg);
