@@ -101,7 +101,7 @@
 		var startX, startY, endX, endY;
 		var startX_1, startY_1, endX_1, endY_1;
 		var startX_2, startY_2, endX_2, endY_2;
-		var objX, objY;
+		var objX_1, objY_1,objX_2, objY_2;
 		var objWidth, objHeight;
 		var dragging = false;
 		var pinch = false;
@@ -377,11 +377,12 @@
 							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
 							// マウスが押された座標を取得
-							startX = e.touches[0].clientX - offsetX[LayerSelect-1];
-							startY = e.touches[0].clientY - offsetY[LayerSelect-1];
+							startX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
+							startY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
 
 							// オブジェクト上の座標かどうかを判定
-							if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
+							if (offsetX[LayerSelect-1] < startX_1+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_1+offsetX[LayerSelect-1]
+									&& offsetY[LayerSelect-1] <startY_1+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_1+offsetY[LayerSelect-1]) {
 								dragging = true; // ドラッグ開始
 							}
 							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
@@ -434,16 +435,14 @@
 				function onMove_sp(e) {
 					e.preventDefault();
 					// マウスが移動した先の座標を取得
-					endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
-					endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
-					endX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
-					endY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
 					var zoom = document.getElementById(`canvas_${LayerSelect -1}`).width / document.getElementById(`canvas_${LayerSelect -1}`).clientWidth;
 					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
 					if (dragging) {
+						endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
+						endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
 						//console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
-						objX = endX_1 - startX_1;
-						objY = endY_1 - startY_1;
+						objX_1 = endX_1 - startX_1;
+						objY_1 = endY_1 - startY_1;
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
 						drawRect();
@@ -451,6 +450,11 @@
 						startY_1 = endY_1;
 					}
 					if(pinch){
+						endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
+						endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
+						endX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
+						endY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
+
 						var startV = Math.abs((startX_2-startX_1)*(startY_2-startY_1));
 						var endV =  Math.abs((endX_2-endX_1)*(endY_2-endY_1));
 						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] * endV/startV
