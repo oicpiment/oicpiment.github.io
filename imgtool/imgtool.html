@@ -368,7 +368,7 @@
 
 				function onDown_sp(e) {
 					e.preventDefault();
-					if(e.touches.lengs == 1){
+					if(e.touches.length == 1){
 
 							// キャンバスの左上端の座標を取得
 							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
@@ -386,7 +386,7 @@
 							}
 							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
 
-					}else if(e.touches.lengs == 2){　//ピンチ操作
+					}else if(e.touches.length == 2){　//ピンチ操作
 							// キャンバスの左上端の座標を取得
 							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
 							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
