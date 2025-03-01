@@ -105,6 +105,10 @@ h2{
 #LayerSelectCanvas{
   display: none;
 }
+#download_canvas{
+  display: none;
+}
+
 
 #Overlay1 {
 	position: fixed;
@@ -135,4 +139,10 @@ h2{
   box-shadow: 0 8px 12px rgba(0,0,0,0.5);
   line-height: 1.4;
   text-align: center;
+}
+
+#download_canvas_image{
+  display: block;
+  width: 80%;
+  margin:auto;
 }
