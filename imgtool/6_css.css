@@ -179,15 +179,18 @@ h2{
 }
 .emoji_button{
   width: 15%;
+  height:auto;
 }
 .emoji_button2{
   width: 10%;
+    height:auto;
 }
 .emoji_button > img{
   width:100%;
+  height:auto;
 
 }
 .emoji_button2 > img{
   width:100%;
-
+  height:auto;
 }
