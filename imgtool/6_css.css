@@ -125,6 +125,7 @@ h2{
   transform: translate(-50%, -50%);
   padding: 20px 30px;
   width: CALC(80%);
+  max-width: CALC(80%);
   height:auto;
   background-color:#fffacd;
   border: 1px solid rgba(0,0,0,0.1);
