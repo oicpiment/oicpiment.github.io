@@ -457,7 +457,7 @@
 
 						var startV = Math.abs((startX_2-startX_1)*(startY_2-startY_1));
 						var endV =  Math.abs((endX_2-endX_1)*(endY_2-endY_1));
-						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] * e.scale //endV/start
+						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] + e.scale //endV/start
 						drawRect();
 						startX_1 = endX_1;
 						startY_1 = endY_1;
