@@ -457,7 +457,7 @@
 
 						var startV = Math.sqrt((startX_2-startX_1)**2+(startY_2-startY_1)**2);
 						var endV =  Math.sqrt((endX_2-endX_1)**2+(endY_2-endY_1)**2);
-						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/start
+						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/startV
 						if(AddCanvasArray[LayerSelect][8] <= 0){AddCanvasArray[LayerSelect][8]=0.01}
 						if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
 						drawRect();
