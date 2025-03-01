@@ -340,6 +340,7 @@
 			//console.log(flg)
 			if(flg[LayerSelect-1] != 0 ){
 				function onDown(e) {
+					e.preventDefault();
 					// キャンバスの左上端の座標を取得
 					offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
 					offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
@@ -360,6 +361,7 @@
 
 				//ドラッグ・ドロップ
 				function onMove(e) {
+					e.preventDefault();
 					// マウスが移動した先の座標を取得
 					endX = e.clientX - offsetX[LayerSelect-1];
 					endY = e.clientY - offsetY[LayerSelect-1];
@@ -378,6 +380,7 @@
 				}
 
 				function onUp(e) {
+					e.preventDefault();
 					dragging = false; // ドラッグ終了
 					console.log("終点",endX,endY)
 				}
