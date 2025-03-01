@@ -99,10 +99,14 @@
 	var AddCanvasArray=[]; //キャンバス情報を配列に保存してみる
 		var x, y, relX, relY;
 		var startX, startY, endX, endY;
+		var startX_1, startY_1, endX_1, endY_1;
+		var startX_2, startY_2, endX_2, endY_2;
 		var objX, objY;
 		var objWidth, objHeight;
 		var dragging = false;
+		var pinch = false;
 		var angle =0;
+		var size =0;
 	var LayerSelect = "null";
 	//var baseCanvas = document.getElementById("ctx_base");
 	//var base_ctx = baseCanvas.getContext("2d");
@@ -116,6 +120,7 @@
 		var startMsec = new Date();
 		while (new Date() - startMsec < waitMsec);
 	}
+
 	//ファイルアップロード対応用--------------------------------------------------------------------------
 	//ベース画像ファイルの選択・処理部分------------------------------------------------------------------
 	//fileInputのinputタグで更新があったら
@@ -313,6 +318,8 @@
 				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchstart', onDown_sp, false);
 				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchmove', onMove_sp, false);
 				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', onUp_sp, false);
+				//document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', pinch_sp, false);
+				//document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', rotate_sp, false);
 
 				//document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('change', rotate, false);
 				console.log(`canvas_${LayerSelect -1}：作業終了3`)
@@ -341,43 +348,67 @@
 			if(flg[LayerSelect-1] != 0 ){
 				function onDown(e) {
 					e.preventDefault();
-					// キャンバスの左上端の座標を取得
-					offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-					offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							// キャンバスの左上端の座標を取得
+							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
 
-					console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
-					//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
-					// マウスが押された座標を取得
-					startX = e.clientX - offsetX[LayerSelect-1];
-					startY = e.clientY - offsetY[LayerSelect-1];
+							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
+							// マウスが押された座標を取得
+							startX = e.clientX - offsetX[LayerSelect-1];
+							startY = e.clientY - offsetY[LayerSelect-1];
 
-					// オブジェクト上の座標かどうかを判定
-					if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
-						dragging = true; // ドラッグ開始
-					}
-					console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+							// オブジェクト上の座標かどうかを判定
+							if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
+								dragging = true; // ドラッグ開始
+							}
+							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
 				}
 
 
 				function onDown_sp(e) {
 					e.preventDefault();
-					// キャンバスの左上端の座標を取得
-					offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-					offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+					if(e.touches.lengs == 1){
 
-					console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
-					//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
-					// マウスが押された座標を取得
-					startX = e.touches[0].clientX - offsetX[LayerSelect-1];
-					startY = e.touches[0].clientY - offsetY[LayerSelect-1];
+							// キャンバスの左上端の座標を取得
+							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
 
-					// オブジェクト上の座標かどうかを判定
-					if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
-						dragging = true; // ドラッグ開始
+							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
+							// マウスが押された座標を取得
+							startX = e.touches[0].clientX - offsetX[LayerSelect-1];
+							startY = e.touches[0].clientY - offsetY[LayerSelect-1];
+
+							// オブジェクト上の座標かどうかを判定
+							if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
+								dragging = true; // ドラッグ開始
+							}
+							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+
+					}else if(e.touches.lengs == 2){　//ピンチ操作
+							// キャンバスの左上端の座標を取得
+							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+
+							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
+							// マウスが押された座標を取得
+							startX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
+							startY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
+							startX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
+							startY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
+
+							// オブジェクト上の座標かどうかを判定
+							if (offsetX[LayerSelect-1] < startX_1+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_1+offsetX[LayerSelect-1]
+									&& offsetY[LayerSelect-1] <startY_1+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_1+offsetY[LayerSelect-1]
+									&& offsetX[LayerSelect-1] < startX_2+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_2+offsetX[LayerSelect-1]
+									&& offsetY[LayerSelect-1] <startY_2+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_2+offsetY[LayerSelect-1]) {
+							 	pinch = true; // ピンチ開始
+							}
+
 					}
-					console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
-
-				}
+			}
 
 
 				//ドラッグ・ドロップ
@@ -403,19 +434,34 @@
 				function onMove_sp(e) {
 					e.preventDefault();
 					// マウスが移動した先の座標を取得
-					endX = e.touches[0].clientX - offsetX[LayerSelect-1];
-					endY = e.touches[0].clientY - offsetY[LayerSelect-1];
+					endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
+					endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
+					endX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
+					endY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
 					var zoom = document.getElementById(`canvas_${LayerSelect -1}`).width / document.getElementById(`canvas_${LayerSelect -1}`).clientWidth;
 					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
 					if (dragging) {
 						//console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
-						objX = endX - startX;
-						objY = endY - startY;
-						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
-						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
+						objX = endX_1 - startX_1;
+						objY = endY_1 - startY_1;
+						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
+						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
 						drawRect();
-						startX = endX;
-						startY = endY;
+						startX_1 = endX_1;
+						startY_1 = endY_1;
+					}
+					if(pinch){
+						var startV = Math.abs((startX_2-startX_1)*(startY_2-startY_1));
+						var endV =  Math.abs((endX_2-endX_1)*(endY_2-endY_1));
+						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] * endV/startV
+						drawRect();
+						startX_1 = endX_1;
+						startY_1 = endY_1;
+						startX_2 = endX_2;
+						startY_2 = endY_2;
+						document.getElementById("size").value = (AddCanvasArray[LayerSelect][8]-1)*100 ;
+						console.log("サイズ：",document.getElementById("size").value);
+						document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
 					}
 				}
 
@@ -428,27 +474,29 @@
 				function onUp_sp(e) {
 					e.preventDefault();
 					dragging = false; // ドラッグ終了
+					pinch = false;
 					console.log("終点",endX,endY)
 				}
 
 
+
+
 				function drawRect() {
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
 
-					//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-					//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-					var transX = AddCanvasArray[LayerSelect][3]+AddCanvasArray[LayerSelect][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-					var transY = AddCanvasArray[LayerSelect][4]+AddCanvasArray[LayerSelect][7]/2; //*AddCanvasArray[LayerSelect][8]/2;
-					var sizeX = AddCanvasArray[LayerSelect][6]*AddCanvasArray[LayerSelect][8];
-					var sizeY = AddCanvasArray[LayerSelect][7]*AddCanvasArray[LayerSelect][8];
-					//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
-					//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( transX , transY ); //中心を移動
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(AddCanvasArray[LayerSelect][5]); //回転
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").drawImage(AddCanvasArray[LayerSelect][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(-AddCanvasArray[LayerSelect][5]); //回転
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( -transX , -transY);//中心を復元
-
+						//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
+						//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
+						var transX = AddCanvasArray[LayerSelect][3]+AddCanvasArray[LayerSelect][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
+						var transY = AddCanvasArray[LayerSelect][4]+AddCanvasArray[LayerSelect][7]/2; //*AddCanvasArray[LayerSelect][8]/2;
+						var sizeX = AddCanvasArray[LayerSelect][6]*AddCanvasArray[LayerSelect][8];
+						var sizeY = AddCanvasArray[LayerSelect][7]*AddCanvasArray[LayerSelect][8];
+						//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
+						//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( transX , transY ); //中心を移動
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(AddCanvasArray[LayerSelect][5]); //回転
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").drawImage(AddCanvasArray[LayerSelect][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(-AddCanvasArray[LayerSelect][5]); //回転
+						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( -transX , -transY);//中心を復元
 				}
 
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mousedown', onDown, false);
@@ -458,6 +506,8 @@
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchstart', onDown_sp, false);
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchmove', onMove_sp, false);
 				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', onUp_sp, false);
+				//document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', pinch_sp, false);
+				//document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', rotate_sp, false);
 
 				//document.getElementById("angle").addEventListener( 'change' ,  rotate , false);
 				console.log("addEventListener　セット完了",flg);
@@ -581,6 +631,10 @@
 		document.getElementById("angle").value = AddCanvasArray[LayerSelect_sub][5] / Math.PI *180 ;
 		console.log("角度：",document.getElementById("angle").value);
 		document.getElementById(`angle_num`).innerText = document.getElementById("angle").value;
+
+		document.getElementById("size").value = (AddCanvasArray[LayerSelect_sub][8]-1)*100 ;
+		console.log("サイズ：",document.getElementById("size").value);
+		document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
 	}
 
 
