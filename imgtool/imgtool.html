@@ -334,7 +334,7 @@
 						count ++;
 						//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
 						AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
-						add_img = null;
+						add_img.dispose();
 					}
 				}
 
