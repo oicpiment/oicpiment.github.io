@@ -1,4 +1,3 @@
-<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
 <!DOCTYPE html>
 <html lang="jp">
 
@@ -6,8 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>画像多重読み込みテスト</title>
-	<script src="./jquery-2.2.4-min.js"></script>
+	<title>画像多重読み込みテスト 2:40 2025/03/06</title>
+	<!--- <script src="./jquery-2.2.4-min.js"></script> --->
 	<!--- <script src="./fabric.js"></script> --->
 	<!--- <link rel="stylesheet" href="6_css分離.css"> --->
 	<link rel="stylesheet" href="6_css.css">
@@ -278,8 +277,10 @@
 				document.getElementById("ctx_base").setAttribute("height",ctxElement.height);
 
 				URL.revokeObjectURL(base_img);
+				base_img = null;
 			};
 			document.getElementById("file-input").value = '';
+			files = null;
 		}
 	}, false);
 
@@ -337,6 +338,8 @@
 						//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
 						AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
 						URL.revokeObjectURL(add_img);
+						files = null;
+						add_img = null;
 					}
 				}
 
@@ -384,6 +387,7 @@
 							//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
 							AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,100,100,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
 							URL.revokeObjectURL(add_img);
+							add_img = null;
 						}
 						document.getElementById('Overlay2').style.display = "none" ;
 					}, false);
@@ -438,7 +442,7 @@
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	// (変更を監視する) オブザーバーのオプション
-	const config2 = { attributes: true, childList: true, characterData: true  , subtree: true };
+	const config2 = { childList: true };//{ attributes: true, childList: true, characterData: true  , subtree: true };
 
 	// オブザーバインスタンスを作成　※切り替えボタンの検知
 	const observer2 = new MutationObserver((mutations) => {
@@ -448,6 +452,7 @@
 			//console.log(`ボタン検知：${LayerSelect_sub}`);
 
 			try{
+				console.log("イベントリスナーのリセット");
 					//枠線けす
 					//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").beginPath();
 					//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
