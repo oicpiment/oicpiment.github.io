@@ -276,6 +276,8 @@
 				ctx.drawImage(base_img, 0, 0, ctxElement.width, ctxElement.height);
 				document.getElementById("ctx_base").setAttribute("width",ctxElement.width);
 				document.getElementById("ctx_base").setAttribute("height",ctxElement.height);
+
+				URL.revokeObjectURL(base_img);
 			};
 			document.getElementById("file-input").value = '';
 		}
@@ -334,7 +336,7 @@
 						count ++;
 						//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
 						AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
-						add_img.dispose();
+						URL.revokeObjectURL(add_img);
 					}
 				}
 
@@ -381,7 +383,7 @@
 
 							//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
 							AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,100,100,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
-							add_img = null;
+							URL.revokeObjectURL(add_img);
 						}
 						document.getElementById('Overlay2').style.display = "none" ;
 					}, false);
