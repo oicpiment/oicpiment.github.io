@@ -1,3 +1,4 @@
+<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
 <!DOCTYPE html>
 <html lang="jp">
 
@@ -5,8 +6,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>画像多重読み込みテスト 2:40 2025/03/06</title>
-	<!--- <script src="./jquery-2.2.4-min.js"></script> --->
+	<title>画像多重読み込みテスト</title>
+	<script src="./jquery-2.2.4-min.js"></script>
 	<!--- <script src="./fabric.js"></script> --->
 	<!--- <link rel="stylesheet" href="6_css分離.css"> --->
 	<link rel="stylesheet" href="6_css.css">
@@ -572,7 +573,7 @@
 						objY = endY - startY;
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
-						drawRect();
+						requestAnimationFrame(drawRect); //drawRect();
 						startX = endX;
 						startY = endY;
 					}
@@ -592,7 +593,7 @@
 						objY_1 = endY_1 - startY_1;
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
-						drawRect();
+						requestAnimationFrame(drawRect); //drawRect();
 						startX_1 = endX_1;
 						startY_1 = endY_1;
 					}
@@ -607,7 +608,7 @@
 						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/startV
 						if(AddCanvasArray[LayerSelect][8] <= 0){AddCanvasArray[LayerSelect][8]=0.1}
 						if(AddCanvasArray[LayerSelect][8] >= 40){AddCanvasArray[LayerSelect][8]=40}
-						drawRect();
+						requestAnimationFrame(drawRect); //drawRect();
 						startX_1 = endX_1;
 						startY_1 = endY_1;
 						startX_2 = endX_2;
@@ -635,6 +636,7 @@
 
 
 				function drawRect() {
+
 						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
 
 						//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
