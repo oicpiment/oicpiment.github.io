@@ -17,7 +17,7 @@
 
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
-		<h5>画像多重読み込み 2025/03/08_0121</h5>
+		<h5>画像多重読み込み 2025/03/08_0154</h5>
 		<div class="tab_content" id="all_content">
 			<p>画像ファイルから読み込み</p>
 			<div id="drop-zone">
@@ -223,6 +223,7 @@
 	var ctxElement = document.getElementById("ctx");
 	//var canvas = canvasElement.getContext("2d");
 	var ctx = ctxElement.getContext("2d");
+	var download_canvas = document.getElementById(`download_canvas`);
 	var base_img= new Image();
 	//var add_img= new Image();
 	let count = 0;
@@ -253,6 +254,7 @@
 	flg=[];
 	offsetX=0;
 	offsetY=0;
+
 	// 指定ミリ秒間だけループさせる（CPUは常にビジー状態）---------------------------------------
 	function sleep(waitMsec) {
 		var startMsec = new Date();
@@ -391,6 +393,7 @@
 			var emoji_buttons = Array.from(document.getElementsByClassName("emoji_button")).concat(Array.from(document.getElementsByClassName("emoji_button2")));
 			emoji_buttons.forEach(function(emoji_button){
 				emoji_button.addEventListener('click', (e) => {
+					e.preventDefault();
 					var add_img= new Image();
 					//imgオブジェクトにURL形式に変換して代入
 					add_img.src = `twemoji_assets/svg/${emoji_button.value}.svg`
@@ -876,15 +879,17 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 		document.getElementById("download_image").addEventListener( "click" ,() => {
-			var download_canvas = document.getElementById(`download_canvas`);
-			download_canvas.setAttribute("width",document.getElementById("ctx_base").width);
-			download_canvas.setAttribute("height",document.getElementById("ctx_base").height);
+			/*
+			download_canvas.setAttribute("width",document.getElementById("ctx").width);
+			download_canvas.setAttribute("height",document.getElementById("ctx").height);
 
 			//背景画像を読み込む
+			download_canvas.getContext("2d").clearRect(0, 0, ctx.width, ctx.height)  // キャンバスをクリア
+
 			download_canvas.getContext("2d").drawImage(base_img,0,0);
 
-			var download_images = Array.from(document.getElementById(`output_sub1`).getElementsByTagName(`canvas`))
-			download_images.forEach(function(canvas){
+			//var download_images = Array.from(document.getElementById(`output_sub1`).getElementsByTagName(`canvas`))
+			AddCanvasArray.forEach(function(canvas){
 				console.log(canvas);
 				//console.log(canvas.id);
 				//download_img.src = canvas.toDataURL(`image/png`);
@@ -901,15 +906,16 @@
 						var sizeY = canvas[7]*canvas[8];
 						//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
 						//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-						ctxElement.getContext("2d").translate( transX , transY ); //中心を移動
-						ctxElement.getContext("2d").rotate(canvas[5]); //回転
-						ctxElement.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-						ctxElement.getContext("2d").rotate(-canvas[5]); //回転
-						ctxElement.getContext("2d").translate( -transX , -transY);//中心を復元
+						download_canvas.getContext("2d").translate( transX , transY ); //中心を移動
+						download_canvas.getContext("2d").rotate(canvas[5]); //回転
+						download_canvas.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
+						download_canvas.getContext("2d").rotate(-canvas[5]); //回転
+						download_canvas.getContext("2d").translate( -transX , -transY);//中心を復元
 					}
 				}
 	　　})
-			document.getElementById(`download_canvas_image`).src = download_canvas.toDataURL("image/png");
+			*/
+			document.getElementById(`download_canvas_image`).src = ctxElement.toDataURL("image/png");
 			document.getElementById('Overlay1').style.display = "block" ;
 	});
 
