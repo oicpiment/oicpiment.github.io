@@ -60,7 +60,7 @@ h2{
 	max-width:100%;
 }
 
-#ctx{
+#ctx,#flame{
             position: absolute;
 
             left:0;
