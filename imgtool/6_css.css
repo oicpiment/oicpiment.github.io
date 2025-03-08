@@ -2,7 +2,7 @@ html{
       font-size: 62.5%;
       }
 
-body{
+.content{
       width:80%;
       //max-width: 640px;
       margin: 0 auto;
@@ -56,11 +56,13 @@ h2{
     padding: 0;
     box-sizing: content-box;
 }
-#ctx_base{
+#ctx_base{display: none;}
+
+#ctx{
 	max-width:100%;
 }
 
-#ctx,#flame{
+#flame{
             position: absolute;
 
             left:0;

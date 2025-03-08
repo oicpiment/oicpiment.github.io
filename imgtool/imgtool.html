@@ -1,3 +1,4 @@
+<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
 <!DOCTYPE html>
 <html lang="jp">
 
@@ -18,7 +19,7 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0251</h5>
+		<h5>twemojiでデコるやつ 0352</h5>
 		<p>画像ファイルから読み込み</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
@@ -40,6 +41,45 @@
 			<button value="1f640" class="emoji_button" type="button"><img src="twemoji_assets/png/1f640.png"></button>
 		</div>
 		<button id="emoji_modal_button" type="button">他の絵文字</button>
+
+		<!--- <button id="add_emoji" type="button">kiss</button> --->
+		<div id="output">
+			<h5>読み出し結果</h5>
+			<div id="output_sub1" class="output_sub1">
+				<canvas id="ctx_base" class="" width ="40" height="60" style="z-index: -2;"></canvas>
+				<canvas id="ctx" class="ctx" width ="40" height="60" style="z-index: -1;"></canvas>
+				<canvas id="flame" class="falme" width ="40" height="60" style="z-index: 0;"></canvas>
+			</div>
+			<div id="select">
+				<select id="select_list" size="5">
+					<option disabled selected>▼操作するレイヤーを選んでください▼</option>
+				</select>
+			</div>
+			<button id="select_list_button" type="button">レイヤー切り替え</button>
+			<button id="layer_del" type="button">レイヤー削除</button><br>
+			<button id="download_image" type="button">保存</button><br>
+			------------------------------<br>
+			回転：<input type="range" name="angle" id="angle" min="-180" max="180"><div id="angle_num"></div>
+			------------------------------<br>
+			サイズ：<input type="range" name="size" id="size" min="-100" max="2000"><div id="size_num"></div>
+			------------------------------<br>
+		</div>
+		<div id="LayerSelectCanvas">
+		</div>
+		<canvas id="download_canvas"></canvas>
+		<br>
+		---------------------------------<br>
+		Copyright 2019 Twitter, Inc and other contributors<br>
+		Code licensed under the MIT License: <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a><br>
+		Graphics licensed under CC-BY 4.0: <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a><br>
+		</div>
+		<div id="Overlay1">
+			<div id="mordal">
+				<p>右クリックや長押しで画像を保存するのです</p>
+				<img id="download_canvas_image" src=""><br>
+				<button id="close" type="button">閉じる</button>
+			</div>
+		</div>
 		<div id="Overlay2">
 			<div id="emoji_modal" class="emoji_modal">
 				<button value="1f4aa" class="emoji_button2" type="button"><img src="twemoji_assets/png/1f4aa.png"></button>
@@ -174,43 +214,6 @@
 				<br><button id="close2" type="button">閉じる</button>
 			</div>
 		</div>
-		<!--- <button id="add_emoji" type="button">kiss</button> --->
-		<div id="output">
-			<h5>読み出し結果</h5>
-			<div id="output_sub1" class="output_sub1">
-				<canvas id="ctx_base" class="" width ="40" height="60" style="z-index: -2;"></canvas>
-				<canvas id="ctx" class="ctx" width ="40" height="60" style="z-index: -1;"></canvas>
-				<canvas id="flame" class="falme" width ="40" height="60" style="z-index: 0;"></canvas>
-			</div>
-			<div id="select">
-				<select id="select_list" size="5">
-					<option disabled selected>▼操作するレイヤーを選んでください▼</option>
-				</select>
-			</div>
-			<button id="select_list_button">レイヤー切り替え</button>
-			<button id="layer_del" type="button">レイヤー削除</button><br>
-			<button id="download_image" type="button">保存</button><br>
-			------------------------------<br>
-			回転：<input type="range" name="angle" id="angle" min="-180" max="180"><div id="angle_num"></div>
-			------------------------------<br>
-			サイズ：<input type="range" name="size" id="size" min="-100" max="2000"><div id="size_num"></div>
-			------------------------------<br>
-		</div>
-		<div id="LayerSelectCanvas">
-		</div>
-		<canvas id="download_canvas"></canvas>
-		<div id="Overlay1">
-			<div id="mordal">
-				<p>右クリックや長押しで画像を保存するのです</p>
-				<img id="download_canvas_image" src=""><br>
-				<button id="close" type="button">閉じる</button>
-			</div>
-		</div>
-		<br>
-		---------------------------------<br>
-		Copyright 2019 Twitter, Inc and other contributors<br>
-		Code licensed under the MIT License: <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a><br>
-		Graphics licensed under CC-BY 4.0: <a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a><br>
 	</body>
 </html>
 
@@ -332,8 +335,8 @@
 				flame.width = base_img.width;
 				flame.height = base_img.height;
 				ctx.drawImage(base_img, 0, 0, ctxElement.width, ctxElement.height);
-				document.getElementById("ctx_base").setAttribute("width",ctxElement.width);
-				document.getElementById("ctx_base").setAttribute("height",ctxElement.height);
+				//document.getElementById("ctx_base").setAttribute("width",ctxElement.width);
+				//document.getElementById("ctx_base").setAttribute("height",ctxElement.height);
 				zoom = ctxElement.width / ctxElement.clientWidth; //倍率の表示
 				URL.revokeObjectURL(base_img);
 				//base_img = null;
@@ -536,8 +539,8 @@
 			LayerSelect = LayerSelect_sub;
 
 			//座標計算
-			objWidth =  document.getElementById(`ctx_base`).width;
-			objHeight = document.getElementById(`ctx_base`).height;
+			objWidth =  document.getElementById(`ctx`).width;
+			objHeight = document.getElementById(`ctx`).height;
 			//console.log(selectCanvas.width,selectCanvas.height);
 			objX = ctxElement.width / 2 - objWidth / 2;
 			objY = ctxElement.height / 2 - objHeight / 2;
@@ -549,8 +552,8 @@
 					e.preventDefault();
 							//console.log("クリック")
 							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
 
 							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
@@ -571,8 +574,8 @@
 					//console.log("指の本数",e.touches.length)
 					if(e.touches.length === 1){
 							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
 
 							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
@@ -589,8 +592,8 @@
 
 					}else if(e.touches.length === 2){　//ピンチ操作
 							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
 
 							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
@@ -765,7 +768,8 @@
 	//　選択したレイヤーを削除する部分
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-	document.getElementById("layer_del").addEventListener( "click" ,() => {
+	document.getElementById("layer_del").addEventListener( "click" ,(e) => {
+			e.preventDefault();
 			//console.log("削除",LayerSelect)
 			AddCanvasArray[LayerSelect].fill("");
 
@@ -794,7 +798,9 @@
 	//　ボタンでレイヤーを切り替える部分
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-	document.getElementById("select_list_button").addEventListener( "click" ,() => {
+	document.getElementById("select_list_button").addEventListener( "click" ,(e) => {
+		console.log("切り替えボタン")
+		e.preventDefault();
 		//console.log(`document.getElementById("select_list").selectedIndex ${document.getElementById("select_list").selectedIndex}  document.getElementById("select_list").children.length ${document.getElementById("select_list").children.length}`)
 		if(document.getElementById("select_list").selectedIndex !== null){
 			if(document.getElementById("select_list").selectedIndex == document.getElementById("select_list").children.length-1){
@@ -813,9 +819,9 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 	//リスト選択時の挙動
-	document.getElementById("select_list").addEventListener( "change" ,() => {
+	document.getElementById("select_list").addEventListener( "change" ,(e) => {
 				//LayerSelect = 2;
-
+				e.preventDefault();
 				LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
 				//console.log(LayerSelect_sub);
 			list_serection();
