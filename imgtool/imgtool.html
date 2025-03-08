@@ -19,7 +19,7 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0352</h5>
+		<h5>twemojiでデコるやつ 0427</h5>
 		<p>画像ファイルから読み込み</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
@@ -526,13 +526,13 @@
 			try{
 				//console.log("イベントリスナーのリセット");
 
-				flame.removeEventListener('mousedown', onDown, false);
-				flame.removeEventListener('mousemove', onMove, false);
-				flame.removeEventListener('mouseup', onUp, false);
+				flame.removeEventListener('mousedown', onDown)//, false);
+				flame.removeEventListener('mousemove', onMove)//, false);
+				flame.removeEventListener('mouseup', onUp)//, false);
 
-				flame.removeEventListener('touchstart', onDown_sp, false);
-				flame.removeEventListener('touchmove', onMove_sp, false);
-				flame.removeEventListener('touchend', onUp_sp, false);
+				flame.removeEventListener('touchstart', onDown_sp)//, false);
+				flame.removeEventListener('touchmove', onMove_sp)//, false);
+				flame.removeEventListener('touchend', onUp_sp)//, false);
 
 			}catch(e){}finally{}
 
@@ -547,7 +547,7 @@
 
 			//console.log(flg[LayerSelect -1])
 			//console.log(flg)
-			if(flg[LayerSelect-1] != 0 ){
+			//if(flg[LayerSelect-1] != 0 ){
 				function onDown(e) {
 					e.preventDefault();
 							//console.log("クリック")
@@ -711,14 +711,14 @@
 					//console.log("終点",endX,endY)
 				}
 
-				flame.addEventListener('mousedown', onDown, false);
-				flame.addEventListener('mousemove', onMove, false);
-				flame.addEventListener('mouseup', onUp, false);
+				flame.addEventListener('mousedown', onDown)//, false);
+				flame.addEventListener('mousemove', onMove)//, false);
+				flame.addEventListener('mouseup', onUp)//, false);
 
-				flame.addEventListener('touchstart', onDown_sp, false);
-				flame.addEventListener('touchmove', onMove_sp, false);
-				flame.addEventListener('touchend', onUp_sp, false);
-			};
+				flame.addEventListener('touchstart', onDown_sp)//, false);
+				flame.addEventListener('touchmove', onMove_sp)//, false);
+				flame.addEventListener('touchend', onUp_sp)//, false);
+			//};
 			requestAnimationFrame(drawRect); //drawRect();
 		});
 	});
@@ -805,12 +805,15 @@
 		if(document.getElementById("select_list").selectedIndex !== null){
 			if(document.getElementById("select_list").selectedIndex == document.getElementById("select_list").children.length-1){
 				document.getElementById("select_list").selectedIndex = 1;
+				console.log(`document.getElementById("select_list").selectedIndex == document.getElementById("select_list").children.length-1`);
 			}else{
 				document.getElementById("select_list").selectedIndex = document.getElementById("select_list").selectedIndex + 1;
 			}
 		//console.log(document.getElementById("select_list").children);
 			LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
 			list_serection();
+		}else{
+			console.log(`Select_list_button document.getElementById("select_list").selectedIndex !== null`);
 		}
 	});
 
@@ -824,7 +827,7 @@
 				e.preventDefault();
 				LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
 				//console.log(LayerSelect_sub);
-			list_serection();
+				list_serection();
 			}
 	);
 
@@ -836,6 +839,7 @@
 		//console.log(LayerSelect_sub,"操作開始");
 
 		if(LayerSelect_sub === null){
+			console.log("list_serection LayerSelect_sub === null");
 			document.getElementById("angle").value = 0 ;
 			document.getElementById(`angle_num`).innerText = 0;
 			document.getElementById("size").value = 100 ;
