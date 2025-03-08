@@ -705,10 +705,10 @@
 						if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
 
 						//座標計算
-						var startC_X = startX_2-startX_1
-						var endC_X = endX_2-endX_1
-						var startC_Y = startY_2-startY_1
-						var endC_Y = endY_2-endY_1
+						var startC_X = (startX_2-startX_1)/2
+						var endC_X = (endX_2-endX_1)/2
+						var startC_Y = (startY_2-startY_1)/2
+						var endC_Y = (endY_2-endY_1)?2
 						objX_2=endC_X-startC_X
 						objY_2=endC_Y-startC_Y
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2; //*zoom;
