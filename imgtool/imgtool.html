@@ -18,7 +18,7 @@
 
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
-		<h5>画像多重読み込み 1538</h5>
+		<h5>画像多重読み込み 1610</h5>
 		<div class="tab_content" id="all_content">
 			<p>画像ファイルから読み込み</p>
 			<div id="drop-zone">
@@ -336,7 +336,7 @@
 						ctxElement.getContext("2d").drawImage(base_img,0,0);
 
 						AddCanvasArray.forEach(function(canvas){
-								console.log(canvas);
+								//console.log(canvas);
 								//console.log(canvas.id);
 								//download_img.src = canvas.toDataURL(`image/png`);
 								if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
@@ -413,7 +413,7 @@
 						//背景画像を読み込む
 						ctxElement.getContext("2d").drawImage(base_img,0,0);
 						AddCanvasArray.forEach(function(canvas){
-								console.log(canvas);
+								//console.log(canvas);
 								//console.log(canvas.id);
 								//download_img.src = canvas.toDataURL(`image/png`);
 								if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
@@ -465,7 +465,7 @@
 	function drawRect() {
 			console.log("描画")
 			if(ctx.width == null){
-					console.log(ctx.width, ctx.height)
+					//console.log(ctx.width, ctx.height)
 					ctxElement.getContext("2d").clearRect(0, 0,40, 60);
 			}
 			ctxElement.getContext("2d").clearRect(0, 0, ctx.width, ctx.height)  // キャンバスをクリア
@@ -473,7 +473,7 @@
 			ctxElement.getContext("2d").drawImage(base_img,0,0);
 
 			AddCanvasArray.forEach(function(canvas){
-					console.log(canvas);
+					//console.log(canvas);
 					//console.log(canvas.id);
 					//download_img.src = canvas.toDataURL(`image/png`);
 					if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
@@ -714,6 +714,8 @@
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_2*zoom;
 
+						//回転
+						AddCanvasArray[LayerSelect][5] = AddCanvasArray[LayerSelect][5] + e.rotation;
 
 						requestAnimationFrame(drawRect); //drawRect();
 						startX_1 = endX_1;
