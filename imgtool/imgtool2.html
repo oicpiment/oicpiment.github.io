@@ -1,3 +1,4 @@
+<!-----コピペ：https://qiita.com/miyataku/items/a65bf6eb6fd8ce8593a9------->
 <!DOCTYPE html>
 <html lang="jp">
 
@@ -5,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>画像多重読み込みテスト</title>
+	<title>twemojiでデコるやつ</title>
 	<script src="./jquery-2.2.4-min.js"></script>
 	<!--- <script src="./fabric.js"></script> --->
 	<!--- <link rel="stylesheet" href="6_css分離.css"> --->
@@ -181,7 +182,7 @@
 			<h5>読み出し結果</h5>
 			<div id="output_sub1" class="output_sub1">
 				<canvas id="ctx_base" class="" width ="40" height="60" style="z-index: -2;"></canvas>
-				<canvas id="ctx" class="ctx" width ="40" height="60" style="z-index: -1;"></canvas>
+				<canvas id="ctx" class="ctx" width ="40" height="60" style="z-index: 0;"></canvas>
 			</div>
 			<div id="select">
 				<select id="select_list" size="5">
@@ -223,11 +224,13 @@
 	var ctxElement = document.getElementById("ctx");
 	//var canvas = canvasElement.getContext("2d");
 	var ctx = ctxElement.getContext("2d");
+	var download_canvas = document.getElementById(`download_canvas`);
 	var base_img= new Image();
 	//var add_img= new Image();
 	let count = 0;
 	var imageData = new ImageData(100,100);
 	var download_img = new Image();
+	var add_img = new Image();
 	var baseX = 0;
 	var baseY = 0;
 	var c0width =0;
@@ -237,20 +240,23 @@
 		var startX, startY, endX, endY;
 		var startX_1, startY_1, endX_1, endY_1;
 		var startX_2, startY_2, endX_2, endY_2;
+		var startC;
 		var objX_1, objY_1,objX_2, objY_2;
 		var objWidth, objHeight;
 		var dragging = false;
 		var pinch = false;
 		var angle =0;
 		var size =0;
+		var zoom = 1;
 	var LayerSelect = "null";
 	//var baseCanvas = document.getElementById("ctx_base");
 	//var base_ctx = baseCanvas.getContext("2d");
 	//var selectCanvas
 	//var sc_ctx
 	flg=[];
-	offsetX={};
-	offsetY={};
+	offsetX=0;
+	offsetY=0;
+
 	// 指定ミリ秒間だけループさせる（CPUは常にビジー状態）---------------------------------------
 	function sleep(waitMsec) {
 		var startMsec = new Date();
@@ -274,8 +280,12 @@
 				ctx.drawImage(base_img, 0, 0, ctxElement.width, ctxElement.height);
 				document.getElementById("ctx_base").setAttribute("width",ctxElement.width);
 				document.getElementById("ctx_base").setAttribute("height",ctxElement.height);
+				zoom = ctxElement.width / ctxElement.clientWidth; //倍率の表示
+				URL.revokeObjectURL(base_img);
+				//base_img = null;
 			};
 			document.getElementById("file-input").value = '';
+			files = null;
 		}
 	}, false);
 
@@ -319,20 +329,54 @@
 					//imgオブジェクトで上記の画像が読み込みが終わったら
 					add_img.onload = function() {
 
-						const newCanvas = lcv.addCanvas();
-						const ctx_add = newCanvas.getContext("2d");
+						AddCanvasArray[count]=[count,ctx,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
 
-						//canvasのサイズを変更して画像を書き写します.
-						ctx_add.width = add_img.width;
-						ctx_add.height = add_img.height;
-							c0width=add_img.width;
-							c0height=add_img.height;
-						ctx_add.drawImage(add_img, 0 , 0 );  //count * 10, count * 10); //, ctx_add.width, ctx_add.height);
+						ctxElement.getContext("2d").clearRect(0, 0, ctx.width, ctx.height)  // キャンバスをクリア
 
-						count ++;
+						//背景画像を読み込む
+						ctxElement.getContext("2d").drawImage(base_img,0,0);
+
+						AddCanvasArray.forEach(function(canvas){
+								//console.log(canvas);
+								//console.log(canvas.id);
+								//download_img.src = canvas.toDataURL(`image/png`);
+								if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
+									//var canvas_num = Number(canvas.id.slice(7))+1;
+									if(canvas[2] !== "" ){
+										var transX = canvas[3]+canvas[6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
+										var transY = canvas[4]+canvas[7]/2; //*AddCanvasArray[LayerSelect][8]/2;
+										var sizeX = canvas[6]*canvas[8];
+										var sizeY = canvas[7]*canvas[8];
+										//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
+										//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
+										ctxElement.getContext("2d").translate( transX , transY ); //中心を移動
+										ctxElement.getContext("2d").rotate(canvas[5]); //回転
+										ctxElement.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
+										ctxElement.getContext("2d").rotate(-canvas[5]); //回転
+										ctxElement.getContext("2d").translate( -transX , -transY);//中心を復元
+									}
+								}
+							})
+								count ++;
+								LayerSelect_sub = count-1;
+
+								var add_list = document.createElement("option");
+								add_list.value =LayerSelect_sub;
+								add_list.innerText =`canvas_${LayerSelect_sub}`;
+								document.getElementById("select_list").appendChild(add_list);
+
+								//flg立てる
+								//if(flg.length != 0){flg.fill(0);}
+								//flg[LayerSelect_sub-1] = 1;
+								document.getElementById("select_list").selectedIndex = document.getElementById("select_list").children.length-1
+								//console.log(document.getElementById("select_list").children);
+								LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
+								list_serection();
 						//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
-						AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
+						URL.revokeObjectURL(add_img);
 
+						files = null;
+						add_img = null;
 					}
 				}
 
@@ -351,35 +395,65 @@
 			var emoji_buttons = Array.from(document.getElementsByClassName("emoji_button")).concat(Array.from(document.getElementsByClassName("emoji_button2")));
 			emoji_buttons.forEach(function(emoji_button){
 				emoji_button.addEventListener('click', (e) => {
-						var add_img = new Image();
-						console.log(e);
-						//imgオブジェクトにURL形式に変換して代入
-						//let files = `twemoji-master/assets/svg/${emoji_button.value}.svg`
-						add_img.src = `twemoji_assets/svg/${emoji_button.value}.svg`
-						//console.log(add_img.src);
-						//add_img.src =URL.createObjectURL(files);
-						console.log(add_img.src);
+					e.preventDefault();
+					var add_img= new Image();
+					//imgオブジェクトにURL形式に変換して代入
+					add_img.src = `twemoji_assets/svg/${emoji_button.value}.svg`
 
+					//imgオブジェクトで上記の画像が読み込みが終わったら
+					add_img.onload = function() {
+							add_img.width=100*zoom;
+							add_img.height=100*zoom;
+						/*
+						ctx_add.drawImage(add_img, 0 , 0 );  //count * 10, count * 10); //, ctx_add.width, ctx_add.height);
+						*/
+						AddCanvasArray[count]=[count,ctx,add_img,0,0,0,add_img.width,add_img.height,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
 
-						//imgオブジェクトで上記の画像が読み込みが終わったら
-						add_img.onload = function() {
+						ctxElement.getContext("2d").clearRect(0, 0, ctx.width, ctx.height)  // キャンバスをクリア
 
-							const newCanvas = lcv.addCanvas();
-							const ctx_add = newCanvas.getContext("2d");
+						//背景画像を読み込む
+						ctxElement.getContext("2d").drawImage(base_img,0,0);
+						AddCanvasArray.forEach(function(canvas){
+								//console.log(canvas);
+								//console.log(canvas.id);
+								//download_img.src = canvas.toDataURL(`image/png`);
+								if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
+									//var canvas_num = Number(canvas.id.slice(7))+1;
+									if(canvas[2] !== "" ){
+										var transX = canvas[3]+canvas[6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
+										var transY = canvas[4]+canvas[7]/2; //*AddCanvasArray[LayerSelect][8]/2;
+										var sizeX = canvas[6]*canvas[8];
+										var sizeY = canvas[7]*canvas[8];
+										//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
+										//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
+										ctxElement.getContext("2d").translate( transX , transY ); //中心を移動
+										ctxElement.getContext("2d").rotate(canvas[5]); //回転
+										ctxElement.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
+										ctxElement.getContext("2d").rotate(-canvas[5]); //回転
+										ctxElement.getContext("2d").translate( -transX , -transY);//中心を復元
+									}
+								}
+							})
+							  count ++;
+								LayerSelect_sub = count-1;
 
-							//canvasのサイズを変更して画像を書き写します.
-							ctx_add.width = 100; //add_img.width;
-							ctx_add.height = 100; //add_img.height;
-							//add_img.width = 100;
-							//add_img.height = 100;
-								//c0width=add_img.width;
-								//c0height=add_img.height;
-							ctx_add.drawImage(add_img, 0 , 0 ,100,100);  //count * 10, count * 10); //, ctx_add.width, ctx_add.height);
-							count ++;
+								var add_list = document.createElement("option");
+								add_list.value =LayerSelect_sub;
+								add_list.innerText =`canvas_${LayerSelect_sub}`;
+								document.getElementById("select_list").appendChild(add_list);
 
-							//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
-							AddCanvasArray[count]=[count,ctx_add,add_img,0,0,0,100,100,1]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,angle,width,height,size);
+								//flg立てる
+								//if(flg.length != 0){flg.fill(0);}
+								//flg[LayerSelect_sub-1] = 1;
+								document.getElementById("select_list").selectedIndex = document.getElementById("select_list").children.length-1
+								//console.log(document.getElementById("select_list").children);
+								LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
+								list_serection();
+						//imageData = ctx_add.getImageData(0,0,ctx_add.width, ctx_add.height);
+						URL.revokeObjectURL(add_img);
 
+						files = null;
+						add_img = null;
 						}
 						document.getElementById('Overlay2').style.display = "none" ;
 					}, false);
@@ -388,6 +462,40 @@
 
 	})();
 
+
+	function drawRect() {
+			console.log("描画")
+			if(ctx.width == null){
+					//console.log(ctx.width, ctx.height)
+					ctxElement.getContext("2d").clearRect(0, 0,40, 60);
+			}
+			ctxElement.getContext("2d").clearRect(0, 0, ctx.width, ctx.height)  // キャンバスをクリア
+			//背景画像を読み込む
+			ctxElement.getContext("2d").drawImage(base_img,0,0);
+
+			AddCanvasArray.forEach(function(canvas){
+					//console.log(canvas);
+					//console.log(canvas.id);
+					//download_img.src = canvas.toDataURL(`image/png`);
+					if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
+						//var canvas_num = Number(canvas.id.slice(7))+1;
+						if(canvas[2] !== "" ){
+							var transX = canvas[3]+canvas[6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
+							var transY = canvas[4]+canvas[7]/2; //*AddCanvasArray[LayerSelect][8]/2;
+							var sizeX = canvas[6]*canvas[8];
+							var sizeY = canvas[7]*canvas[8];
+							//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
+							//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
+							ctxElement.getContext("2d").translate( transX , transY ); //中心を移動
+							ctxElement.getContext("2d").rotate(canvas[5]); //回転
+							ctxElement.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
+							ctxElement.getContext("2d").rotate(-canvas[5]); //回転
+							ctxElement.getContext("2d").translate( -transX , -transY);//中心を復元
+						}
+					}
+	　　})
+
+	}
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	//　追加したレイヤーを操作可能にする部分
@@ -401,16 +509,11 @@
 		        // 何かしたいこと
 			LayerSelect_sub = count;
 			if(LayerSelect="null"){ LayerSelect = count }
-			console.log(`画像追加検知：${LayerSelect_sub}`);
+			//console.log(`画像追加検知：${LayerSelect_sub}`);
 			document.getElementById(`LayerSelectCanvas`).value = `canvas_${LayerSelect_sub-1}`;
 			document.getElementById(`LayerSelectCanvas`).innerText = `canvas_${LayerSelect_sub-1}`;
 			document.getElementById(`LayerSelectCanvas`).nodeValue = `canvas_${LayerSelect_sub-1}`;
 			document.getElementById(`LayerSelectCanvas`).textContent = `canvas_${LayerSelect_sub-1}`;
-
-			//<select id="select_list" size="5">
-			//	<option value="1" >canvas_0</option>
-			//	<option value="2" >canvas_1</option>
-			//</select>
 
 			var add_list = document.createElement("option");
 			add_list.value =LayerSelect_sub;
@@ -444,27 +547,25 @@
 			console.log(`ボタン検知：${LayerSelect_sub}`);
 
 			try{
+				console.log("イベントリスナーのリセット");
 					//枠線けす
 					//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").beginPath();
 					//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
 					//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").putImageData(AddCanvasArray[LayerSelect][2],AddCanvasArray[LayerSelect][3],AddCanvasArray[LayerSelect][4]) ;
-				document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('mousedown', onDown, false);
-				document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('mousemove', onMove, false);
-				document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('mouseup', onUp, false);
 
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchstart', onDown_sp, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchmove', onMove_sp, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', onUp_sp, false);
-				//document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', pinch_sp, false);
-				//document.getElementById(`canvas_${LayerSelect -1}`).removeEventListener('touchend', rotate_sp, false);
+				document.getElementById(`ctx`).removeEventListener('mousedown', onDown, false);
+				document.getElementById(`ctx`).removeEventListener('mousemove', onMove, false);
+				document.getElementById(`ctx`).removeEventListener('mouseup', onUp, false);
 
-				//document.getElementById(`canvas_${LayerSelect_sub -1}`).removeEventListener('change', rotate, false);
-				console.log(`canvas_${LayerSelect -1}：作業終了3`)
+				document.getElementById(`ctx`).removeEventListener('touchstart', onDown_sp, false);
+				document.getElementById(`ctx`).removeEventListener('touchmove', onMove_sp, false);
+				document.getElementById(`ctx`).removeEventListener('touchend', onUp_sp, false);
+
 			}catch(e){}finally{}
 
 			LayerSelect = LayerSelect_sub;
 
-			console.log(`canvas_${LayerSelect -1}：操作開始`);
+			//console.log(`canvas_${LayerSelect -1}：操作開始`);
 			//参考：AddCanvasArray[LayerSelect]=[LayerSelect,ctx_add,imageData,0,0]; //キャンバス情報を配列に保存してみる(No,canvas,画像,baseX,baseY,元サイズX,元サイズY,サイズ倍率);
 
 					//枠線つける
@@ -485,66 +586,70 @@
 			if(flg[LayerSelect-1] != 0 ){
 				function onDown(e) {
 					e.preventDefault();
+							console.log("クリック")
 							// キャンバスの左上端の座標を取得
-							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
 
-							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
 							// マウスが押された座標を取得
-							startX = e.clientX - offsetX[LayerSelect-1];
-							startY = e.clientY - offsetY[LayerSelect-1];
+							startX = e.clientX - offsetX;
+							startY = e.clientY - offsetY;
 
 							// オブジェクト上の座標かどうかを判定
-							if (offsetX[LayerSelect-1] < startX+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX+offsetX[LayerSelect-1] && offsetY[LayerSelect-1] <startY+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY+offsetY[LayerSelect-1]) {
+							if (offsetX < startX+offsetX && (offsetX + objWidth) > startX+offsetX && offsetY <startY+offsetY && (offsetY + objHeight) > startY+offsetY) {
 								dragging = true; // ドラッグ開始
 							}
-							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+							//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
 				}
 
 
 				function onDown_sp(e) {
 					e.preventDefault();
-					if(e.touches.length == 1){
-
+					//console.log("指の本数",e.touches.length)
+					if(e.touches.length === 1){
 							// キャンバスの左上端の座標を取得
-							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
 
-							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
 							// マウスが押された座標を取得
-							startX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
-							startY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
+							startX_1 = e.touches[0].clientX - offsetX;
+							startY_1 = e.touches[0].clientY - offsetY;
 
 							// オブジェクト上の座標かどうかを判定
-							if (offsetX[LayerSelect-1] < startX_1+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_1+offsetX[LayerSelect-1]
-									&& offsetY[LayerSelect-1] <startY_1+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_1+offsetY[LayerSelect-1]) {
+							if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
+									&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY) {
 								dragging = true; // ドラッグ開始
 							}
-							console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+							//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
 
-					}else if(e.touches.length == 2){　//ピンチ操作
+					}else if(e.touches.length === 2){　//ピンチ操作
 							// キャンバスの左上端の座標を取得
-							offsetX[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().left;
-							offsetY[LayerSelect-1] = document.getElementById(`ctx_base`).getBoundingClientRect().top;
+							offsetX = document.getElementById(`ctx_base`).getBoundingClientRect().left;
+							offsetY = document.getElementById(`ctx_base`).getBoundingClientRect().top;
 
-							console.log(`キャンバスの左上の座標：(${offsetX[LayerSelect-1]},${offsetY[LayerSelect-1]})`);
+							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
 							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
 							// マウスが押された座標を取得
-							startX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
-							startY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
-							startX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
-							startY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
+							startX_1 = e.touches[0].clientX - offsetX;
+							startY_1 = e.touches[0].clientY - offsetY;
+							startX_2 = e.touches[1].clientX - offsetX;
+							startY_2 = e.touches[1].clientY - offsetY;
+							startC =  AddCanvasArray[LayerSelect][5] ;
 
 							// オブジェクト上の座標かどうかを判定
-							if (offsetX[LayerSelect-1] < startX_1+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_1+offsetX[LayerSelect-1]
-									&& offsetY[LayerSelect-1] <startY_1+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_1+offsetY[LayerSelect-1]
-									&& offsetX[LayerSelect-1] < startX_2+offsetX[LayerSelect-1] && (offsetX[LayerSelect-1] + objWidth) > startX_2+offsetX[LayerSelect-1]
-									&& offsetY[LayerSelect-1] <startY_2+offsetY[LayerSelect-1] && (offsetY[LayerSelect-1] + objHeight) > startY_2+offsetY[LayerSelect-1]) {
+							if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
+									&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY
+									&& offsetX < startX_2+offsetX && (offsetX + objWidth) > startX_2+offsetX
+									&& offsetY <startY_2+offsetY && (offsetY + objHeight) > startY_2+offsetY) {
 							 	pinch = true; // ピンチ開始
 							}
-
+					}else{
+						dragging = false;
+						pinch = false;
 					}
 			}
 
@@ -553,17 +658,18 @@
 				function onMove(e) {
 					e.preventDefault();
 					// マウスが移動した先の座標を取得
-					endX = e.clientX - offsetX[LayerSelect-1];
-					endY = e.clientY - offsetY[LayerSelect-1];
-					var zoom = document.getElementById(`canvas_${LayerSelect -1}`).width / document.getElementById(`canvas_${LayerSelect -1}`).clientWidth;
+					endX = e.clientX - offsetX;
+					endY = e.clientY - offsetY;
+					//var zoom = ctxElement.width / ctxElement.clientWidth;
 					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
 					if (dragging) {
-						//console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+						console.log(LayerSelect,"ドラッグ中");
+						//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
 						objX = endX - startX;
 						objY = endY - startY;
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
-						drawRect();
+						requestAnimationFrame(drawRect); //drawRect();
 						startX = endX;
 						startY = endY;
 					}
@@ -572,90 +678,84 @@
 				function onMove_sp(e) {
 					e.preventDefault();
 					// マウスが移動した先の座標を取得
-					var zoom = document.getElementById(`canvas_${LayerSelect -1}`).width / document.getElementById(`canvas_${LayerSelect -1}`).clientWidth;
+					//var zoom = ctxElement.width / ctxElement.clientWidth;
 					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
 					if (dragging) {
-						endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
-						endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
-						//console.log("始点",`左上：${offsetX[LayerSelect-1]} / クリック：${startX+offsetX[LayerSelect-1]} / 右端：${offsetX[LayerSelect-1]+objWidth},左上：${offsetY[LayerSelect-1]} / クリック：${startY+offsetY[LayerSelect-1]} / 下端：${offsetY[LayerSelect-1]+objHeight}`,dragging);
+						endX_1 = e.touches[0].clientX - offsetX;
+						endY_1 = e.touches[0].clientY - offsetY;
+
+						//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
 						objX_1 = endX_1 - startX_1;
 						objY_1 = endY_1 - startY_1;
 						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
 						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
-						drawRect();
+						requestAnimationFrame(drawRect); //drawRect();
 						startX_1 = endX_1;
 						startY_1 = endY_1;
 					}
 					if(pinch){
-						endX_1 = e.touches[0].clientX - offsetX[LayerSelect-1];
-						endY_1 = e.touches[0].clientY - offsetY[LayerSelect-1];
-						endX_2 = e.touches[1].clientX - offsetX[LayerSelect-1];
-						endY_2 = e.touches[1].clientY - offsetY[LayerSelect-1];
+						dragging = false;
 
+						endX_1 = e.touches[0].clientX - offsetX;
+						endY_1 = e.touches[0].clientY - offsetY;
+						endX_2 = e.touches[1].clientX - offsetX;
+						endY_2 = e.touches[1].clientY - offsetY;
+
+						//サイズ計算
 						var startV = Math.sqrt((startX_2-startX_1)**2+(startY_2-startY_1)**2);
 						var endV =  Math.sqrt((endX_2-endX_1)**2+(endY_2-endY_1)**2);
 						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/startV
-						if(AddCanvasArray[LayerSelect][8] <= 0){AddCanvasArray[LayerSelect][8]=0.01}
+						if(AddCanvasArray[LayerSelect][8] <= 0.1){AddCanvasArray[LayerSelect][8]=0.1}
 						if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
-						drawRect();
+
+						//座標計算
+						var startC_X = (startX_2+startX_1)/2
+						var endC_X = (endX_2+endX_1)/2
+						var startC_Y = (startY_2+startY_1)/2
+						var endC_Y = (endY_2+endY_1)/2
+						objX_2=endC_X-startC_X
+						objY_2=endC_Y-startC_Y
+						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2*zoom;
+						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_2*zoom;
+
+						//回転
+						AddCanvasArray[LayerSelect][5] = startC + (e.rotation/180 *Math.PI);
+
+						requestAnimationFrame(drawRect); //drawRect();
 						startX_1 = endX_1;
 						startY_1 = endY_1;
 						startX_2 = endX_2;
 						startY_2 = endY_2;
+						document.getElementById("angle").value = AddCanvasArray[LayerSelect][5] / Math.PI *180 ;
+						document.getElementById(`angle_num`).innerText = `${document.getElementById("angle").value}度/rotation値：${e.rotation}`;
 						document.getElementById("size").value = (AddCanvasArray[LayerSelect][8]-1)*100 ;
-						console.log("サイズ：",document.getElementById("size").value);
 						document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
+
 					}
 				}
 
 				function onUp(e) {
 					e.preventDefault();
 					dragging = false; // ドラッグ終了
-					console.log("終点",endX,endY)
+					//console.log("終点",endX,endY)
 				}
 
 				function onUp_sp(e) {
 					e.preventDefault();
 					dragging = false; // ドラッグ終了
 					pinch = false;
-					console.log("終点",endX,endY)
+					//console.log("終点",endX,endY)
 				}
 
+				document.getElementById(`ctx`).addEventListener('mousedown', onDown, false);
+				document.getElementById(`ctx`).addEventListener('mousemove', onMove, false);
+				document.getElementById(`ctx`).addEventListener('mouseup', onUp, false);
 
-
-
-				function drawRect() {
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
-
-						//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-						//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-						var transX = AddCanvasArray[LayerSelect][3]+AddCanvasArray[LayerSelect][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-						var transY = AddCanvasArray[LayerSelect][4]+AddCanvasArray[LayerSelect][7]/2; //*AddCanvasArray[LayerSelect][8]/2;
-						var sizeX = AddCanvasArray[LayerSelect][6]*AddCanvasArray[LayerSelect][8];
-						var sizeY = AddCanvasArray[LayerSelect][7]*AddCanvasArray[LayerSelect][8];
-						//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
-						//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( transX , transY ); //中心を移動
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(AddCanvasArray[LayerSelect][5]); //回転
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").drawImage(AddCanvasArray[LayerSelect][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(-AddCanvasArray[LayerSelect][5]); //回転
-						document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( -transX , -transY);//中心を復元
-				}
-
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mousedown', onDown, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mousemove', onMove, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('mouseup', onUp, false);
-
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchstart', onDown_sp, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchmove', onMove_sp, false);
-				document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', onUp_sp, false);
-				//document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', pinch_sp, false);
-				//document.getElementById(`canvas_${LayerSelect -1}`).addEventListener('touchend', rotate_sp, false);
-
-				//document.getElementById("angle").addEventListener( 'change' ,  rotate , false);
-				console.log("addEventListener　セット完了",flg);
-
-			}
+				document.getElementById(`ctx`).addEventListener('touchstart', onDown_sp, false);
+				document.getElementById(`ctx`).addEventListener('touchmove', onMove_sp, false);
+				document.getElementById(`ctx`).addEventListener('touchend', onUp_sp, false);
+			};
+			requestAnimationFrame(drawRect); //drawRect();
 		});
 	});
 
@@ -669,27 +769,14 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 	document.getElementById("angle").addEventListener( "change" ,() => {
-					console.log("slider操作",LayerSelect)
+					//console.log("slider操作",LayerSelect)
 					var transX = AddCanvasArray[LayerSelect][2].width/2;
 					var transY = AddCanvasArray[LayerSelect][2].height/2;
 					angle = document.getElementById("angle").value
 					AddCanvasArray[LayerSelect][5] = angle/180 *Math.PI ;
 
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
+					requestAnimationFrame(drawRect); //drawRect();
 
-					//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-					var transX = AddCanvasArray[LayerSelect][3]+AddCanvasArray[LayerSelect][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-					var transY = AddCanvasArray[LayerSelect][4]+AddCanvasArray[LayerSelect][7]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-					var sizeX = AddCanvasArray[LayerSelect][6]*AddCanvasArray[LayerSelect][8];
-					var sizeY = AddCanvasArray[LayerSelect][7]*AddCanvasArray[LayerSelect][8];
-					//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
-					//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( transX , transY ); //中心を移動
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(AddCanvasArray[LayerSelect][5]); //回転
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").drawImage(AddCanvasArray[LayerSelect][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(-AddCanvasArray[LayerSelect][5]); //回転
-					document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( -transX , -transY);//中心を復元
-					console.log("角度：",angle);
 					document.getElementById(`angle_num`).innerText = angle;
 				});
 
@@ -699,27 +786,14 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 	document.getElementById("size").addEventListener( "change" ,() => {
-			console.log("slider操作",LayerSelect)
+			//console.log("slider操作",LayerSelect)
 			angle = document.getElementById("angle").value
 			AddCanvasArray[LayerSelect][5] = angle/180 *Math.PI ;
 			size = 1 + document.getElementById("size").value/100;
 			AddCanvasArray[LayerSelect][8] = size;
 
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
+			requestAnimationFrame(drawRect); //drawRect();
 
-			//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-			var transX = AddCanvasArray[LayerSelect][3]+AddCanvasArray[LayerSelect][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;  //100/2 =50  100*1.20/2=60
-			var transY = AddCanvasArray[LayerSelect][4]+AddCanvasArray[LayerSelect][7]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-			var sizeX = AddCanvasArray[LayerSelect][6]*AddCanvasArray[LayerSelect][8];
-			var sizeY = AddCanvasArray[LayerSelect][7]*AddCanvasArray[LayerSelect][8];
-			//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
-			//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( transX , transY ); //中心を移動
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(AddCanvasArray[LayerSelect][5]); //回転
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").drawImage(AddCanvasArray[LayerSelect][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").rotate(-AddCanvasArray[LayerSelect][5]); //回転
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").translate( -transX , -transY);//中心を復元
-			console.log("サイズ：",AddCanvasArray[LayerSelect][8]);
 			document.getElementById(`size_num`).innerText = `${size*100}%`;
 		}
 	);
@@ -731,20 +805,26 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 	document.getElementById("layer_del").addEventListener( "click" ,() => {
-			console.log("削除",LayerSelect)
+			//console.log("削除",LayerSelect)
 			AddCanvasArray[LayerSelect].fill("");
 
-			document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
+			//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
 			var del_index =document.getElementById("select_list").selectedIndex;
 			document.getElementById("select_list").removeChild(document.getElementById("select_list").children[del_index]);
-			console.log( del_index);
-			if(del_index>1){
+			console.log(`リスト長さ：${document.getElementById("select_list").childElementCount}・変更後のリスト:${del_index}`)
+
+			if(document.getElementById("select_list").childElementCount <= 1){
+				document.getElementById("select_list").selectedIndex = null;
+				LayerSelect_sub = null;
+			}else if(del_index>1){
 				document.getElementById("select_list").selectedIndex = del_index-1;
+				LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
 			}else{
 				document.getElementById("select_list").selectedIndex = del_index;
+				LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
 			}
-			LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
-			console.log(LayerSelect_sub);
+
+			//console.log(LayerSelect_sub);
 			list_serection();
 		}
 	);
@@ -757,27 +837,33 @@
 	//リスト選択時の挙動
 	document.getElementById("select_list").addEventListener( "change" ,() => {
 				//LayerSelect = 2;
+
 				LayerSelect_sub = document.getElementById("select_list").children[document.getElementById("select_list").selectedIndex].value
-				console.log(LayerSelect_sub);
+				//console.log(LayerSelect_sub);
 			list_serection();
 			}
 	);
 
 	function list_serection(){
-		console.log("select_list：",document.getElementById("select_list").value);
-		document.getElementById(`LayerSelectCanvas`).value = `canvas_${LayerSelect_sub-1}`;
-		document.getElementById(`LayerSelectCanvas`).innerText = `canvas_${LayerSelect_sub-1}`;
-		document.getElementById(`LayerSelectCanvas`).nodeValue = `canvas_${LayerSelect_sub-1}`;
-		document.getElementById(`LayerSelectCanvas`).textContent = `canvas_${LayerSelect_sub-1}`;
+		//console.log("select_list：",document.getElementById("select_list").value);
 		flg.fill(0);
-		flg[LayerSelect_sub-1] = 1;
-		document.getElementById("angle").value = AddCanvasArray[LayerSelect_sub][5] / Math.PI *180 ;
-		console.log("角度：",document.getElementById("angle").value);
-		document.getElementById(`angle_num`).innerText = document.getElementById("angle").value;
+		flg[LayerSelect_sub] = 1;
 
-		document.getElementById("size").value = (AddCanvasArray[LayerSelect_sub][8]-1)*100 ;
-		console.log("サイズ：",document.getElementById("size").value);
-		document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
+		console.log(LayerSelect_sub,"操作開始");
+
+		if(LayerSelect_sub === null){
+			document.getElementById("angle").value = 0 ;
+			document.getElementById(`angle_num`).innerText = 0;
+			document.getElementById("size").value = 100 ;
+			document.getElementById(`size_num`).innerText = `100%`;
+			document.getElementById(`LayerSelectCanvas`).innerText = AddCanvasArray[LayerSelect_sub];
+		}else{
+			document.getElementById("angle").value = AddCanvasArray[LayerSelect_sub][5] / Math.PI *180 ;
+			document.getElementById(`angle_num`).innerText = document.getElementById("angle").value;
+			document.getElementById("size").value = (AddCanvasArray[LayerSelect_sub][8]-1)*100 ;
+			document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
+			document.getElementById(`LayerSelectCanvas`).innerText = AddCanvasArray[LayerSelect_sub];
+		}
 	}
 
 
@@ -786,40 +872,7 @@
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 		document.getElementById("download_image").addEventListener( "click" ,() => {
-			var download_canvas = document.getElementById(`download_canvas`);
-			download_canvas.setAttribute("width",document.getElementById("ctx_base").width);
-			download_canvas.setAttribute("height",document.getElementById("ctx_base").height);
-
-			//背景画像を読み込む
-			download_canvas.getContext("2d").drawImage(base_img,0,0);
-
-			var download_images = Array.from(document.getElementById(`output_sub1`).getElementsByTagName(`canvas`))
-			download_images.forEach(function(canvas){
-					//console.log(canvas);
-					console.log(canvas.id);
-					//download_img.src = canvas.toDataURL(`image/png`);
-					if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
-						var canvas_num = Number(canvas.id.slice(7))+1;
-						if(AddCanvasArray[canvas_num][2] !== "" ){
-							console.log(canvas_num)
-							console.log(AddCanvasArray)
-							//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-							//console.log("左上座標X",AddCanvasArray[LayerSelect][3],"左上座標Y",AddCanvasArray[LayerSelect][4]);
-							var transX = AddCanvasArray[canvas_num][3]+AddCanvasArray[canvas_num][6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-							var transY = AddCanvasArray[canvas_num][4]+AddCanvasArray[canvas_num][7]/2; //*AddCanvasArray[LayerSelect][8]/2;
-							var sizeX = AddCanvasArray[canvas_num][6]*AddCanvasArray[canvas_num][8];
-							var sizeY = AddCanvasArray[canvas_num][7]*AddCanvasArray[canvas_num][8];
-							//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
-							//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
-							download_canvas.getContext("2d").translate( transX , transY ); //中心を移動
-							download_canvas.getContext("2d").rotate(AddCanvasArray[canvas_num][5]); //回転
-							download_canvas.getContext("2d").drawImage(AddCanvasArray[canvas_num][2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
-							download_canvas.getContext("2d").rotate(-AddCanvasArray[canvas_num][5]); //回転
-							download_canvas.getContext("2d").translate( -transX , -transY);//中心を復元
-						}
-					}
-	　　})
-			document.getElementById(`download_canvas_image`).src = download_canvas.toDataURL("image/png");
+			document.getElementById(`download_canvas_image`).src = ctxElement.toDataURL("image/png");
 			document.getElementById('Overlay1').style.display = "block" ;
 	});
 

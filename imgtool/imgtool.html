@@ -18,7 +18,7 @@
 
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
-		<h5>画像多重読み込み 2210</h5>
+		<h5>画像多重読み込み 2234</h5>
 		<div class="tab_content" id="all_content">
 			<p>画像ファイルから読み込み</p>
 			<div id="drop-zone">
@@ -647,7 +647,9 @@
 									&& offsetY <startY_2+offsetY && (offsetY + objHeight) > startY_2+offsetY) {
 							 	pinch = true; // ピンチ開始
 							}
-
+					}else{
+						dragging = false;
+						pinch = false;
 					}
 			}
 
