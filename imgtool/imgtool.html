@@ -19,7 +19,7 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0608</h5>
+		<h5>twemojiでデコるやつ 0616</h5>
 		<p>画像ファイルから読み込み</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
@@ -423,10 +423,10 @@
 			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2*zoom;
 			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_2*zoom;
 			//回転
-			if((startC + (e.rotation/180 *Math.PI))%360 >= Math.PI){
-				AddCanvasArray[LayerSelect][5] = (startC + (e.rotation/180 *Math.PI))%Math.PI;
+			if((startC + (e.rotation/180 *Math.PI)) % 2*Math.PI >= Math.PI){
+				AddCanvasArray[LayerSelect][5] = (startC + (e.rotation/180 *Math.PI)) % 2*Math.PI;
 			}else{
-				AddCanvasArray[LayerSelect][5] = (startC + (e.rotation/180 *Math.PI))%Math.PI -2*Math.PI;
+				AddCanvasArray[LayerSelect][5] = (startC + (e.rotation/180 *Math.PI)) % 2*Math.PI -2*Math.PI;
 			}
 			//描画
 			requestAnimationFrame(drawRect); //drawRect();
