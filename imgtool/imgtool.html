@@ -18,7 +18,7 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0231</h5>
+		<h5>twemojiでデコるやつ 0251</h5>
 		<p>画像ファイルから読み込み</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
@@ -242,6 +242,7 @@
 		var startX_1, startY_1, endX_1, endY_1;
 		var startX_2, startY_2, endX_2, endY_2;
 		var startC;
+		var transX,transY,sizeX,sizeY;
 		var objX_1, objY_1,objX_2, objY_2;
 		var objWidth, objHeight;
 		var dragging = false;
@@ -284,10 +285,10 @@
 					if(canvas.id !== `ctx` && canvas.id !== `ctx_base` ){
 						//var canvas_num = Number(canvas.id.slice(7))+1;
 						if(canvas[2] !== "" ){
-							var transX = canvas[3]+canvas[6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
-							var transY = canvas[4]+canvas[7]/2; //*AddCanvasArray[LayerSelect][8]/2;
-							var sizeX = canvas[6]*canvas[8];
-							var sizeY = canvas[7]*canvas[8];
+							transX = canvas[3]+canvas[6]/2;  //*AddCanvasArray[LayerSelect][8]/2;
+							transY = canvas[4]+canvas[7]/2; //*AddCanvasArray[LayerSelect][8]/2;
+							sizeX = canvas[6]*canvas[8];
+							sizeY = canvas[7]*canvas[8];
 							//参考：AddCanvasArray[count]=[count,ctx_add,imageData,0,0,0]; //キャンバス情報を配列に保存してみる(0:No , 1:canvas , 2:画像 , 3;baseX , 4:baseY , 5:angle);
 							//中心を移動　AddCanvasArray[LayerSelect][2].width , AddCanvasArray[LayerSelect][2].height
 							ctxElement.getContext("2d").translate( transX , transY ); //中心を移動
@@ -301,6 +302,7 @@
 										flame.getContext("2d").beginPath();
 										flame.getContext("2d").rect( -sizeX/2,-sizeY/2,sizeX,sizeY);
 										flame.getContext("2d").strokeStyle ="red";
+										flame.getContext("2d").lineWidth = 1*zoom;
 										flame.getContext("2d").stroke();
 									flame.getContext("2d").rotate(-canvas[5]); //回転
 									flame.getContext("2d").translate( -transX , -transY);//中心を復元
