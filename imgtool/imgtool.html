@@ -19,7 +19,7 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0427</h5>
+		<h5>twemojiでデコるやつ 0440</h5>
 		<p>画像ファイルから読み込み</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
@@ -512,6 +512,153 @@
 	// 対象ノードとオブザーバの設定を渡す
 	observer1.observe(document.getElementById('output_sub1') , config1);
 
+
+
+	//座標計算
+	objWidth =  document.getElementById(`ctx`).width;
+	objHeight = document.getElementById(`ctx`).height;
+	//console.log(selectCanvas.width,selectCanvas.height);
+	objX = ctxElement.width / 2 - objWidth / 2;
+	objY = ctxElement.height / 2 - objHeight / 2;
+
+	function onDown(e) {
+			e.preventDefault();
+			//console.log("クリック")
+			// キャンバスの左上端の座標を取得
+			offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+			offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
+			// マウスが押された座標を取得
+			startX = e.clientX - offsetX;
+			startY = e.clientY - offsetY;
+			// オブジェクト上の座標かどうかを判定
+			if (offsetX < startX+offsetX && (offsetX + objWidth) > startX+offsetX && offsetY <startY+offsetY && (offsetY + objHeight) > startY+offsetY) {
+				dragging = true; // ドラッグ開始
+			}
+	}
+	function onDown_sp(e) {
+		e.preventDefault();
+		//console.log("指の本数",e.touches.length)
+		if(e.touches.length === 1){
+				// キャンバスの左上端の座標を取得
+				offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+				offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
+				// マウスが押された座標を取得
+				startX_1 = e.touches[0].clientX - offsetX;
+				startY_1 = e.touches[0].clientY - offsetY;
+				// オブジェクト上の座標かどうかを判定
+				if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
+						&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY) {
+					dragging = true; // ドラッグ開始
+				}
+		}else if(e.touches.length === 2){　//ピンチ操作
+				// キャンバスの左上端の座標を取得
+				offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
+				offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
+				// マウスが押された座標を取得
+				startX_1 = e.touches[0].clientX - offsetX;
+				startY_1 = e.touches[0].clientY - offsetY;
+				startX_2 = e.touches[1].clientX - offsetX;
+				startY_2 = e.touches[1].clientY - offsetY;
+				startC =  AddCanvasArray[LayerSelect][5] ;
+				// オブジェクト上の座標かどうかを判定
+				if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
+						&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY
+						&& offsetX < startX_2+offsetX && (offsetX + objWidth) > startX_2+offsetX
+						&& offsetY <startY_2+offsetY && (offsetY + objHeight) > startY_2+offsetY) {
+					pinch = true; // ピンチ開始
+				}
+		}else{
+			dragging = false;
+			pinch = false;
+		}
+	}
+	//ドラッグ・ドロップ
+	function onMove(e) {
+		e.preventDefault();
+		// マウスが移動した先の座標を取得
+		endX = e.clientX - offsetX;
+		endY = e.clientY - offsetY;
+		// ドラッグが開始されていればオブジェクトの座標を更新して再描画
+		if (dragging) {
+			//console.log(LayerSelect,"ドラッグ中");
+			objX = endX - startX;
+			objY = endY - startY;
+			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
+			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
+			requestAnimationFrame(drawRect); //drawRect();
+			startX = endX;
+			startY = endY;
+		}
+	}
+	function onMove_sp(e) {
+		e.preventDefault();
+		// ドラッグが開始されていればオブジェクトの座標を更新して再描画
+		if (dragging) {
+			endX_1 = e.touches[0].clientX - offsetX;
+			endY_1 = e.touches[0].clientY - offsetY;
+			//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
+			objX_1 = endX_1 - startX_1;
+			objY_1 = endY_1 - startY_1;
+			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
+			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
+			requestAnimationFrame(drawRect); //drawRect();
+			startX_1 = endX_1;
+			startY_1 = endY_1;
+		}
+		if(pinch){
+			dragging = false;
+			endX_1 = e.touches[0].clientX - offsetX;
+			endY_1 = e.touches[0].clientY - offsetY;
+			endX_2 = e.touches[1].clientX - offsetX;
+			endY_2 = e.touches[1].clientY - offsetY;
+			//サイズ計算
+			var startV = Math.sqrt((startX_2-startX_1)**2+(startY_2-startY_1)**2);
+			var endV =  Math.sqrt((endX_2-endX_1)**2+(endY_2-endY_1)**2);
+			AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/startV
+			if(AddCanvasArray[LayerSelect][8] <= 0.1){AddCanvasArray[LayerSelect][8]=0.1}
+			if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
+			//座標計算
+			var startC_X = (startX_2+startX_1)/2
+			var endC_X = (endX_2+endX_1)/2
+			var startC_Y = (startY_2+startY_1)/2
+			var endC_Y = (endY_2+endY_1)/2
+			objX_2=endC_X-startC_X
+			objY_2=endC_Y-startC_Y
+			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2*zoom;
+			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_2*zoom;
+			//回転
+			AddCanvasArray[LayerSelect][5] = startC + (e.rotation/180 *Math.PI);
+			//描画
+			requestAnimationFrame(drawRect); //drawRect();
+			startX_1 = endX_1;
+			startY_1 = endY_1;
+			startX_2 = endX_2;
+			startY_2 = endY_2;
+			document.getElementById("angle").value = AddCanvasArray[LayerSelect][5] / Math.PI *180 ;
+			document.getElementById(`angle_num`).innerText = `${document.getElementById("angle").value}度/rotation値：${e.rotation}`;
+			document.getElementById("size").value = (AddCanvasArray[LayerSelect][8]-1)*100 ;
+			document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
+		}
+	}
+	function onUp(e) {
+		e.preventDefault();
+		dragging = false; // ドラッグ終了
+		//console.log("終点",endX,endY)
+	}
+	function onUp_sp(e) {
+		e.preventDefault();
+		dragging = false; // ドラッグ終了
+		pinch = false;
+		//console.log("終点",endX,endY)
+	}
+	flame.addEventListener('mousedown', onDown)//, false);
+	flame.addEventListener('mousemove', onMove)//, false);
+	flame.addEventListener('mouseup', onUp)//, false);
+	flame.addEventListener('touchstart', onDown_sp)//, false);
+	flame.addEventListener('touchmove', onMove_sp)//, false);
+	flame.addEventListener('touchend', onUp_sp)//, false);
+
+
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	// (変更を監視する) オブザーバーのオプション
 	const config2 = { attributes: true, childList: true, characterData: true  , subtree: true };
@@ -522,7 +669,7 @@
 
 	        	// 何かしたいこと
 			//console.log(`ボタン検知：${LayerSelect_sub}`);
-
+			/*
 			try{
 				//console.log("イベントリスナーのリセット");
 
@@ -535,189 +682,15 @@
 				flame.removeEventListener('touchend', onUp_sp)//, false);
 
 			}catch(e){}finally{}
+			*/
 
 			LayerSelect = LayerSelect_sub;
 
-			//座標計算
-			objWidth =  document.getElementById(`ctx`).width;
-			objHeight = document.getElementById(`ctx`).height;
-			//console.log(selectCanvas.width,selectCanvas.height);
-			objX = ctxElement.width / 2 - objWidth / 2;
-			objY = ctxElement.height / 2 - objHeight / 2;
 
 			//console.log(flg[LayerSelect -1])
 			//console.log(flg)
 			//if(flg[LayerSelect-1] != 0 ){
-				function onDown(e) {
-					e.preventDefault();
-							//console.log("クリック")
-							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
 
-							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
-							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
-							// マウスが押された座標を取得
-							startX = e.clientX - offsetX;
-							startY = e.clientY - offsetY;
-
-							// オブジェクト上の座標かどうかを判定
-							if (offsetX < startX+offsetX && (offsetX + objWidth) > startX+offsetX && offsetY <startY+offsetY && (offsetY + objHeight) > startY+offsetY) {
-								dragging = true; // ドラッグ開始
-							}
-							//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
-				}
-
-
-				function onDown_sp(e) {
-					e.preventDefault();
-					//console.log("指の本数",e.touches.length)
-					if(e.touches.length === 1){
-							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
-
-							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
-							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
-							// マウスが押された座標を取得
-							startX_1 = e.touches[0].clientX - offsetX;
-							startY_1 = e.touches[0].clientY - offsetY;
-
-							// オブジェクト上の座標かどうかを判定
-							if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
-									&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY) {
-								dragging = true; // ドラッグ開始
-							}
-							//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
-
-					}else if(e.touches.length === 2){　//ピンチ操作
-							// キャンバスの左上端の座標を取得
-							offsetX = document.getElementById(`ctx`).getBoundingClientRect().left;
-							offsetY = document.getElementById(`ctx`).getBoundingClientRect().top;
-
-							//console.log(`キャンバスの左上の座標：(${offsetX},${offsetY})`);
-							//console.log(`objX,Y：(${objX},${objY})`,`ctxElement.W,H：(${ctxElement.width},${ctxElement.height})`);
-							// マウスが押された座標を取得
-							startX_1 = e.touches[0].clientX - offsetX;
-							startY_1 = e.touches[0].clientY - offsetY;
-							startX_2 = e.touches[1].clientX - offsetX;
-							startY_2 = e.touches[1].clientY - offsetY;
-							startC =  AddCanvasArray[LayerSelect][5] ;
-
-							// オブジェクト上の座標かどうかを判定
-							if (offsetX < startX_1+offsetX && (offsetX + objWidth) > startX_1+offsetX
-									&& offsetY <startY_1+offsetY && (offsetY + objHeight) > startY_1+offsetY
-									&& offsetX < startX_2+offsetX && (offsetX + objWidth) > startX_2+offsetX
-									&& offsetY <startY_2+offsetY && (offsetY + objHeight) > startY_2+offsetY) {
-							 	pinch = true; // ピンチ開始
-							}
-					}else{
-						dragging = false;
-						pinch = false;
-					}
-			}
-
-
-				//ドラッグ・ドロップ
-				function onMove(e) {
-					e.preventDefault();
-					// マウスが移動した先の座標を取得
-					endX = e.clientX - offsetX;
-					endY = e.clientY - offsetY;
-					//var zoom = ctxElement.width / ctxElement.clientWidth;
-					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
-					if (dragging) {
-						//console.log(LayerSelect,"ドラッグ中");
-						//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
-						objX = endX - startX;
-						objY = endY - startY;
-						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
-						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
-						requestAnimationFrame(drawRect); //drawRect();
-						startX = endX;
-						startY = endY;
-					}
-				}
-
-				function onMove_sp(e) {
-					e.preventDefault();
-					// マウスが移動した先の座標を取得
-					//var zoom = ctxElement.width / ctxElement.clientWidth;
-					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
-					if (dragging) {
-						endX_1 = e.touches[0].clientX - offsetX;
-						endY_1 = e.touches[0].clientY - offsetY;
-
-						//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
-						objX_1 = endX_1 - startX_1;
-						objY_1 = endY_1 - startY_1;
-						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
-						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
-						requestAnimationFrame(drawRect); //drawRect();
-						startX_1 = endX_1;
-						startY_1 = endY_1;
-					}
-					if(pinch){
-						dragging = false;
-
-						endX_1 = e.touches[0].clientX - offsetX;
-						endY_1 = e.touches[0].clientY - offsetY;
-						endX_2 = e.touches[1].clientX - offsetX;
-						endY_2 = e.touches[1].clientY - offsetY;
-
-						//サイズ計算
-						var startV = Math.sqrt((startX_2-startX_1)**2+(startY_2-startY_1)**2);
-						var endV =  Math.sqrt((endX_2-endX_1)**2+(endY_2-endY_1)**2);
-						AddCanvasArray[LayerSelect][8] = AddCanvasArray[LayerSelect][8] *endV/startV
-						if(AddCanvasArray[LayerSelect][8] <= 0.1){AddCanvasArray[LayerSelect][8]=0.1}
-						if(AddCanvasArray[LayerSelect][8] >= 20){AddCanvasArray[LayerSelect][8]=20}
-
-						//座標計算
-						var startC_X = (startX_2+startX_1)/2
-						var endC_X = (endX_2+endX_1)/2
-						var startC_Y = (startY_2+startY_1)/2
-						var endC_Y = (endY_2+endY_1)/2
-						objX_2=endC_X-startC_X
-						objY_2=endC_Y-startC_Y
-						AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_2*zoom;
-						AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_2*zoom;
-
-						//回転
-						AddCanvasArray[LayerSelect][5] = startC + (e.rotation/180 *Math.PI);
-
-						requestAnimationFrame(drawRect); //drawRect();
-						startX_1 = endX_1;
-						startY_1 = endY_1;
-						startX_2 = endX_2;
-						startY_2 = endY_2;
-						document.getElementById("angle").value = AddCanvasArray[LayerSelect][5] / Math.PI *180 ;
-						document.getElementById(`angle_num`).innerText = `${document.getElementById("angle").value}度/rotation値：${e.rotation}`;
-						document.getElementById("size").value = (AddCanvasArray[LayerSelect][8]-1)*100 ;
-						document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
-
-					}
-				}
-
-				function onUp(e) {
-					e.preventDefault();
-					dragging = false; // ドラッグ終了
-					//console.log("終点",endX,endY)
-				}
-
-				function onUp_sp(e) {
-					e.preventDefault();
-					dragging = false; // ドラッグ終了
-					pinch = false;
-					//console.log("終点",endX,endY)
-				}
-
-				flame.addEventListener('mousedown', onDown)//, false);
-				flame.addEventListener('mousemove', onMove)//, false);
-				flame.addEventListener('mouseup', onUp)//, false);
-
-				flame.addEventListener('touchstart', onDown_sp)//, false);
-				flame.addEventListener('touchmove', onMove_sp)//, false);
-				flame.addEventListener('touchend', onUp_sp)//, false);
 			//};
 			requestAnimationFrame(drawRect); //drawRect();
 		});
