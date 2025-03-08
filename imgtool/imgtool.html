@@ -296,7 +296,7 @@
 							ctxElement.getContext("2d").drawImage(canvas[2],-sizeX/2,-sizeY/2,sizeX,sizeY); //,AddCanvasArray[LayerSelect][1].width,AddCanvasArray[LayerSelect][1].height) ;　//描画
 
 							if(canvas[0] == LayerSelect){//枠線つける
-									console.log("枠線")
+									//console.log("枠線")
 									flame.getContext("2d").translate( transX , transY ); //中心を移動
 									flame.getContext("2d").rotate(canvas[5]); //回転
 										flame.getContext("2d").beginPath();
@@ -517,10 +517,10 @@
 		mutations.forEach((mutation) => {
 
 	        	// 何かしたいこと
-			console.log(`ボタン検知：${LayerSelect_sub}`);
+			//console.log(`ボタン検知：${LayerSelect_sub}`);
 
 			try{
-				console.log("イベントリスナーのリセット");
+				//console.log("イベントリスナーのリセット");
 
 				flame.removeEventListener('mousedown', onDown, false);
 				flame.removeEventListener('mousemove', onMove, false);
@@ -623,7 +623,7 @@
 					//var zoom = ctxElement.width / ctxElement.clientWidth;
 					// ドラッグが開始されていればオブジェクトの座標を更新して再描画
 					if (dragging) {
-						console.log(LayerSelect,"ドラッグ中");
+						//console.log(LayerSelect,"ドラッグ中");
 						//console.log("始点",`左上：${offsetX} / クリック：${startX+offsetX} / 右端：${offsetX+objWidth},左上：${offsetY} / クリック：${startY+offsetY} / 下端：${offsetY+objHeight}`,dragging);
 						objX = endX - startX;
 						objY = endY - startY;
@@ -771,7 +771,7 @@
 			//document.getElementById(`canvas_${LayerSelect -1}`).getContext("2d").clearRect(0, 0, document.getElementById(`canvas_${LayerSelect -1}`).width, document.getElementById(`canvas_${LayerSelect -1}`).height)  // キャンバスをクリア
 			var del_index =document.getElementById("select_list").selectedIndex;
 			document.getElementById("select_list").removeChild(document.getElementById("select_list").children[del_index]);
-			console.log(`リスト長さ：${document.getElementById("select_list").childElementCount}・変更後のリスト:${del_index}`)
+			//console.log(`リスト長さ：${document.getElementById("select_list").childElementCount}・変更後のリスト:${del_index}`)
 
 			if(document.getElementById("select_list").childElementCount <= 1){
 				document.getElementById("select_list").selectedIndex = null;
@@ -809,7 +809,7 @@
 		flg.fill(0);
 		flg[LayerSelect_sub] = 1;
 
-		console.log(LayerSelect_sub,"操作開始");
+		//console.log(LayerSelect_sub,"操作開始");
 
 		if(LayerSelect_sub === null){
 			document.getElementById("angle").value = 0 ;
@@ -838,7 +838,7 @@
 
 //その他ボタン動作
 	document.getElementById("select_list_button").addEventListener( "click" ,() => {
-		console.log(`document.getElementById("select_list").selectedIndex ${document.getElementById("select_list").selectedIndex}  document.getElementById("select_list").children.length ${document.getElementById("select_list").children.length}`)
+		//console.log(`document.getElementById("select_list").selectedIndex ${document.getElementById("select_list").selectedIndex}  document.getElementById("select_list").children.length ${document.getElementById("select_list").children.length}`)
 		if(document.getElementById("select_list").selectedIndex == document.getElementById("select_list").children.length-1){
 			document.getElementById("select_list").selectedIndex = 1;
 		}else{
