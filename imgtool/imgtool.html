@@ -19,8 +19,8 @@
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
 	<div class="content">
-		<h5>twemojiでデコるやつ 0705</h5>
-		<p>画像ファイルから読み込み</p>
+		<h5>twemojiでデコるやつ</h5>
+		<p>画像ファイルから読み込み 0714</p>
 		<div id="drop-zone">
 			<p>ファイルをドラッグ＆ドロップ</p><p>もしくはファイルを選択</p>
 			<input type="file" name="file" id="file-input">
@@ -253,7 +253,7 @@
 		var angle =0;
 		var size =0;
 		var zoom = 1;
-	var LayerSelect = "null";
+		var LayerSelect = "null";
 	//var baseCanvas = document.getElementById("ctx_base");
 	//var base_ctx = baseCanvas.getContext("2d");
 	//var selectCanvas
@@ -381,7 +381,8 @@
 			objY = endY - startY;
 			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX*zoom;
 			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY*zoom;
-			requestAnimationFrame(drawRect); //drawRect();
+			//requestAnimationFrame(drawRect);
+			drawRect();
 			startX = endX;
 			startY = endY;
 		}
@@ -397,7 +398,8 @@
 			objY_1 = endY_1 - startY_1;
 			AddCanvasArray[LayerSelect][3] = AddCanvasArray[LayerSelect][3] + objX_1*zoom;
 			AddCanvasArray[LayerSelect][4] = AddCanvasArray[LayerSelect][4] + objY_1*zoom;
-			requestAnimationFrame(drawRect); //drawRect();
+			//requestAnimationFrame(drawRect);
+			drawRect();
 			startX_1 = endX_1;
 			startY_1 = endY_1;
 		}
@@ -431,7 +433,9 @@
 				AddCanvasArray[LayerSelect][5] = (startC + e.rotation/180*Math.PI)%(2*Math.PI) +2*Math.PI;
 			}
 			//描画
-			requestAnimationFrame(drawRect); //drawRect();
+			//requestAnimationFrame(drawRect);
+			drawRect();
+
 			startX_1 = endX_1;
 			startY_1 = endY_1;
 			startX_2 = endX_2;
