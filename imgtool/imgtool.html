@@ -18,7 +18,7 @@
 
 	<!-----HTML　■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■---->
 	<body>
-		<h5>画像多重読み込み 1718</h5>
+		<h5>画像多重読み込み 1746</h5>
 		<div class="tab_content" id="all_content">
 			<p>画像ファイルから読み込み</p>
 			<div id="drop-zone">
@@ -722,10 +722,10 @@
 						startY_1 = endY_1;
 						startX_2 = endX_2;
 						startY_2 = endY_2;
+						document.getElementById("angle").value = AddCanvasArray[LayerSelect][5] / Math.PI *180 ;
+						document.getElementById(`angle_num`).innerText = `${document.getElementById("angle").value}度/rotation値：${e.rotation}`;
 						document.getElementById("size").value = (AddCanvasArray[LayerSelect][8]-1)*100 ;
 						document.getElementById(`size_num`).innerText = `${document.getElementById("size").value}%`;
-						document.getElementById("angle").value = AddCanvasArray[LayerSelect][5] / Math.PI *180 ;
-						document.getElementById(`angle_num`).innerText = `${document.getElementById("angle").value}度`;
 
 					}
 				}
