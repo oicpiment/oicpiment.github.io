@@ -12,7 +12,7 @@
 <style>
 
 html{
-	font-size: min(62.5%,16px);
+	font-size: max(62.5%,16px);
 	touch-action: manipulation;
 }
 
@@ -20,18 +20,18 @@ body{
 	width:80%;
 	max-width: 640px;
 	margin: 0 auto;
-	font-size: min(calc(125% + 0.5vw),16px);
 }
 
-h1{
+.h1{
 	margin-bottom: 10px;
+	font-size: max(calc(150% + 0.5vw),16px);
 }
 h6{
 	margin-top:10px;
 }
 .button_r{
 	width:100%;
-	font-size: min(calc(125% + 0.5vw),16px);
+	font-size: max(calc(125% + 0.5vw),16px);
 }
 .table{
 	display: flex;
@@ -45,7 +45,7 @@ h6{
 }
 .item_block{
 	width: 33%;
-	border:1px  solid #DDD;
+	border:1px  solid #140303;
 }
 .col{
 	align-items: stretch;
@@ -55,52 +55,75 @@ h6{
 }
 
 .hyoshi_tittle{
-	display: block;
+	display: flex;
 	flex-wrap: wrap;
 	width:100%;
 	align-items: stretch;
 }
 	.hyoshi{
-		width: 100%;	
-	}
-	.hyoshi>img{
 		width: 100%;
 		height: 38vw;
+		position: relative;
+	}
+	.hyoshi>img{
+		display: flex;
+		width: 100%;
 		object-fit: contain;
 	}
+	.hyoshi>.count{
+		display: flex;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top:0;
+		left:0;
+		background-color: burlywood;
+		opacity: 0.5;
+	}
+	.hyoshi>.count_num{
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		font-size: max(calc(300% + 0.5vw),16px);
+	}
+	
 	.title{
 		width: 100%;
 		text-align: center;
+		font-size: max(calc(50% + 0.5vw),16px);
+
 	}
 	.price{
 		width: 100%;
 		text-align: center;
+		font-size: max(calc(50% + 0.5vw),16px);
+
 	}
-.count_pm{
-	padding-top: 10px;
-	padding-bottom: 10px;
-	display: flex;
-	width:100%;
-	background-color: #DDD;
-	align-items: center;
-}
-	.count{
-		width: 40%;
-		text-align: center;
+	.count_pm{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		display: flex;
+		width:100%;
+		background-color: #DDD;
+		align-items: center;
 	}
 	.button_p{
 		width: 30%;
 		text-align: center;
 	}
 	.button_m{
-		width: 30%;
+		width: 100%;
+		height: 100%;
 		text-align: center;
 	}
 		.button_m>button,.button_p>button{
 			/*display: block;*/
 			width: 80%;
-			height: 80%;
+			/* height: 80%; */
 			text-align: center;
+			font-size: max(calc(50% + 0.5vw),16px);
+
 		}
 
 </style>
@@ -108,84 +131,100 @@ h6{
 
 <!-----HTML---------------------------------------------------------------->
 <body>
-<h1>合計金額：<span id="result">0</span>円</h1>
+<div class="h1">合計金額：<span id="result">0</span>円</div>
 <!--<h6>※セット割引：-<span id="result_discount">0</span>円</h6>-->
 <br>
 <button class="button_r" onclick="reset();">リセット</button><br><br>
 
 <div class="table">
 	<div class="row">
+
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/hangesyo7.jpg" alt="半夏生の本7の表紙"></div>
+				<div class="hyoshi" id="plus1">
+					<img src="./img2025/hangesyo7.jpg" alt="半夏生の本7の表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty1">0</div>
+				</div>
 				<div class="title">半夏生の本 7</div>
 				<div class="price">600円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty1">0</div>
-					<div class="button_p"><button id="plus1">+</button></div>
-					<div class="button_m"><button id="minus1">-</button></div>
+					<div class="button_m"><button id="minus1">減らす</button></div>
 				</div>
 			</div>
 		</div>
+
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/hangesyo6.jpg" alt="半夏生の本6の表紙"></div>
+				<div class="hyoshi" id="plus2">
+					<img src="./img2025/hangesyo6.jpg" alt="半夏生の本6の表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty2">0</div>
+				</div>
 				<div class="title">半夏生の本 6</div>
 				<div class="price">500円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty2">0</div>
-					<div class="button_p"><button id="plus2">+</button></div>
-					<div class="button_m"><button id="minus2">-</button></div>
+					<div class="button_m"><button id="minus2">減らす</button></div>
 				</div>
 			</div>
 		</div>
+
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/hangesyo5.jpg" alt="半夏生の本5の表紙"></div>
+				<div class="hyoshi" id="plus3">
+					<img src="./img2025/hangesyo5.jpg" alt="半夏生の本5の表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty3">0</div>
+				</div>
 				<div class="title" >半夏生の本 5</div>
 				<div class="price" >300円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty3">0</div>
-					<div class="button_p"><button id="plus3">+</button></div>
-					<div class="button_m"><button id="minus3">-</button></div>
+					<div class="button_m"><button id="minus3">減らす</button></div>
 				</div>
 			</div>
 		</div>
+
 	</div>
 	<div class="row">
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/hangesyo4.jpg" alt="半夏生の本4の表紙"></div>
+				<div class="hyoshi" id="plus4">
+					<img src="./img2025/hangesyo4.jpg" alt="半夏生の本4の表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty4">0</div>
+				</div>
 				<div class="title">半夏生の本 4</div>
 				<div class="price">300円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty4">0</div>
-					<div class="button_p"><button id="plus4">+</button></div>
-					<div class="button_m"><button id="minus4">-</button></div>
+					<div class="button_m"><button id="minus4">減らす</button></div>
 				</div>
 			</div>
 		</div>
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/kikiyumegatari.jpg" alt="キキユメガタリの表紙"></div>
+				<div class="hyoshi" id="plus5">
+					<img src="./img2025/kikiyumegatari.jpg" alt="キキユメガタリの表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty5">0</div>
+				</div>
 				<div class="title">キキユメガタリ</div>
 				<div class="price">800円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty5">0</div>
-					<div class="button_p"><button id="plus5">+</button></div>
-					<div class="button_m"><button id="minus5">-</button></div>
+					<div class="button_m"><button id="minus5">減らす</button></div>
 				</div>
 			</div>
 		</div>
 		<div class="item_block">
 			<div class="hyoshi_tittle">
-				<div class="hyoshi"><img src="./img2025/utsutsugoya.jpg" alt="現五夜の表紙"></div>
+				<div class="hyoshi" id="plus6">
+					<img src="./img2025/utsutsugoya.jpg" alt="現五夜の表紙">
+					<div class="count"></div>
+					<div class="count_num" id="Qty6">0</div>	
+				</div>
 				<div class="title">現五夜</div>
 				<div class="price">700円</div>
 				<div class="count_pm">
-					<div class="count" id="Qty6">0</div>
-					<div class="button_p"><button id="plus6">+</button></div>
-					<div class="button_m"><button id="minus6">-</button></div>
+					<div class="button_m"><button id="minus6">減らす</button></div>
 				</div>
 			</div>
 		</div>
@@ -364,7 +403,3 @@ function reset(){
 
 
 </script>
-
-
-
-
