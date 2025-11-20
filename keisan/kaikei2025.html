@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>同人誌　価格計算 2025</title>
+
+<!-----CSS----------------------------------------------------------------->
+<style>
+
+html{
+	font-size: 62.5%;
+}
+
+body{
+	width:80%;
+	max-width: 640px;
+	margin: 0 auto;
+	font-size: calc(125% + 0.5vw);
+}
+
+h1{
+	margin-bottom: 10px;
+}
+h6{
+	margin-top:10px;
+}
+.button_r{
+	width:100%;
+	font-size: calc(125% + 0.5vw);
+}
+.table{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.row{
+	display: flex;
+	width: 100%;
+	margin-bottom: 30px;
+}
+.item_block{
+	width: 33%;
+	border:1px  solid #DDD;
+}
+.col{
+	align-items: stretch;
+	padding: 5px;
+	vertical-align: top;
+	border:1px  solid #DDD;
+}
+
+.hyoshi_tittle{
+	display: block;
+	flex-wrap: wrap;
+	width:100%;
+	align-items: stretch;
+}
+	.hyoshi{
+		width: 100%;	
+	}
+	.hyoshi>img{
+		width: 100%;
+		height: 38vw;
+		object-fit: contain;
+	}
+	.title{
+		width: 100%;
+		text-align: center;
+	}
+	.price{
+		width: 100%;
+		text-align: center;
+	}
+.count_pm{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	display: flex;
+	width:100%;
+	background-color: #DDD;
+	align-items: center;
+}
+	.count{
+		width: 40%;
+		text-align: center;
+	}
+	.button_p{
+		width: 30%;
+		text-align: center;
+	}
+	.button_m{
+		width: 30%;
+		text-align: center;
+	}
+		.button_m>button,.button_p>button{
+			/*display: block;*/
+			width: 80%;
+			height: 80%;
+			text-align: center;
+		}
+
+</style>
+</head>
+
+<!-----HTML---------------------------------------------------------------->
+<body>
+<h1>合計金額：<span id="result">0</span>円</h1>
+<!--<h6>※セット割引：-<span id="result_discount">0</span>円</h6>-->
+<br>
+<button class="button_r" onclick="reset();">リセット</button><br><br>
+
+<div class="table">
+	<div class="row">
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/hangesyo7.jpg" alt="半夏生の本7の表紙"></div>
+				<div class="title">半夏生の本 7</div>
+				<div class="price">600円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty1">0</div>
+					<div class="button_p"><button id="plus1">+</button></div>
+					<div class="button_m"><button id="minus1">-</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/hangesyo6.jpg" alt="半夏生の本6の表紙"></div>
+				<div class="title">半夏生の本 6</div>
+				<div class="price">500円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty2">0</div>
+					<div class="button_p"><button id="plus2">+</button></div>
+					<div class="button_m"><button id="minus2">-</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/hangesyo5.jpg" alt="半夏生の本5の表紙"></div>
+				<div class="title" >半夏生の本 5</div>
+				<div class="price" >300円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty3">0</div>
+					<div class="button_p"><button id="plus3">+</button></div>
+					<div class="button_m"><button id="minus3">-</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/hangesyo4.jpg" alt="半夏生の本4の表紙"></div>
+				<div class="title">半夏生の本 4</div>
+				<div class="price">300円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty4">0</div>
+					<div class="button_p"><button id="plus4">+</button></div>
+					<div class="button_m"><button id="minus4">-</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/kikiyumegatari.jpg" alt="キキユメガタリの表紙"></div>
+				<div class="title">キキユメガタリ</div>
+				<div class="price">800円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty5">0</div>
+					<div class="button_p"><button id="plus5">+</button></div>
+					<div class="button_m"><button id="minus5">-</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="item_block">
+			<div class="hyoshi_tittle">
+				<div class="hyoshi"><img src="/img/utsutsugoya.jpg" alt="現五夜の表紙"></div>
+				<div class="title">現五夜</div>
+				<div class="price">700円</div>
+				<div class="count_pm">
+					<div class="count" id="Qty6">0</div>
+					<div class="button_p"><button id="plus6">+</button></div>
+					<div class="button_m"><button id="minus6">-</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>
+
+<!-----javascript-------------------------------------------------------->
+<script language="javascript" type="text/javascript">
+
+//計算結果--------------
+var result = document.getElementById("result");
+var result_discount = document.getElementById("result_discount");
+
+function result_calc(){
+	price1 = 600 * Count1;
+	price2 = 500 * Count2;
+	price3 = 300 * Count3;
+	price4 = 300 * Count4;
+	price5 = 800 * Count5;
+	price6 = 700 * Count6;
+	discount = 0;
+	/*
+	if(Count1>0 && Count2>0){
+		if(Count1 >= Count2){
+			discount = Count2 * 100;
+		}else{
+			discount = Count1 * 100;
+		}
+	}
+	*/
+	result.innerHTML = price1+price2+price3+price4+price5+price6-discount;
+	result_discount.innerHTML = discount;
+}
+
+
+//1冊目-----------------
+var QtyCount1 = document.getElementById("Qty1"); 
+var plusButton1 = document.getElementById("plus1");
+var minusButton1 = document.getElementById("minus1");
+var Count1 = 0;
+var price1 = 0;
+
+plusButton1.addEventListener('click', () => {
+	Count1 ++;
+	QtyCount1.innerHTML = Count1;
+	result_calc();
+});
+minusButton1.addEventListener('click', () => {
+	if(Count1>0){
+		Count1 --;
+		QtyCount1.innerHTML = Count1;
+	}
+	result_calc();
+});
+
+//2冊目-----------------
+var QtyCount2 = document.getElementById("Qty2"); 
+var plusButton2 = document.getElementById("plus2");
+var minusButton2 = document.getElementById("minus2");
+var Count2 = 0;
+var price2 = 0;
+
+plusButton2.addEventListener('click', () => {
+	Count2 ++;
+	QtyCount2.innerHTML = Count2;
+	result_calc();
+});
+minusButton2.addEventListener('click', () => {
+	if(Count2>0){
+		Count2 --;
+		QtyCount2.innerHTML = Count2;
+	}
+	result_calc();
+});
+
+//3冊目-----------------
+var QtyCount3 = document.getElementById("Qty3");
+var plusButton3 = document.getElementById("plus3");
+var minusButton3 = document.getElementById("minus3");
+var Count3 = 0;
+var price3 = 0;
+
+plusButton3.addEventListener('click', () => {
+	Count3 ++;
+	QtyCount3.innerHTML = Count3;
+	result_calc();
+});
+minusButton3.addEventListener('click', () => {
+	if(Count3>0){
+		Count3 --;
+		QtyCount3.innerHTML = Count3;
+	}
+	result_calc();
+});
+
+//4冊目-----------------
+var QtyCount4 = document.getElementById("Qty4");
+var plusButton4 = document.getElementById("plus4");
+var minusButton4 = document.getElementById("minus4");
+var Count4 = 0;
+var price4 = 0;
+
+plusButton4.addEventListener('click', () => {
+	Count4 ++;
+	QtyCount4.innerHTML = Count4;
+	result_calc();
+});
+minusButton4.addEventListener('click', () => {
+	if(Count4>0){
+		Count4 --;
+		QtyCount4.innerHTML = Count4;
+	}
+	result_calc();
+});
+
+//5冊目-----------------
+var QtyCount5 = document.getElementById("Qty5"); 
+var plusButton5 = document.getElementById("plus5");
+var minusButton5 = document.getElementById("minus5");
+var Count5 = 0;
+var price5 = 0;
+
+plusButton5.addEventListener('click', () => {
+	Count5 ++;
+	QtyCount5.innerHTML = Count5;
+	result_calc();
+});
+minusButton5.addEventListener('click', () => {
+	if(Count5>0){
+		Count5 --;
+		QtyCount5.innerHTML = Count5;
+	}
+	result_calc();
+});
+
+//6冊目-----------------
+var QtyCount6 = document.getElementById("Qty6"); 
+var plusButton6 = document.getElementById("plus6");
+var minusButton6 = document.getElementById("minus6");
+var Count6 = 0;
+var price6 = 0;
+
+plusButton6.addEventListener('click', () => {
+	Count6 ++;
+	QtyCount6.innerHTML = Count6;
+	result_calc();
+});
+minusButton6.addEventListener('click', () => {
+	if(Count6>0){
+		Count6 --;
+		QtyCount6.innerHTML = Count6;
+	}
+	result_calc();
+});
+
+
+//リセット-----------------
+function reset(){
+	Count1 = 0;
+	Count2 = 0;
+	Count3 = 0;
+	Count4 = 0;
+	Count5 = 0;
+	Count6 = 0;
+	QtyCount1.innerHTML = Count1;
+	QtyCount2.innerHTML = Count2;
+	QtyCount3.innerHTML = Count3;
+	QtyCount4.innerHTML = Count4;
+	QtyCount5.innerHTML = Count5;
+	QtyCount6.innerHTML = Count6;
+	result_calc();
+};
+
+
+</script>
