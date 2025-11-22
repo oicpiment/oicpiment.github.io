@@ -26,7 +26,7 @@ body{
 	margin-bottom: 10px;
 	font-size: max(calc(150% + 0.5vw),16px);
 }
-h6{
+.h6{
 	margin-top:10px;
 }
 .button_r{
@@ -42,71 +42,100 @@ h6{
 	display: flex;
 	width: 100%;
 	margin-bottom: 30px;
+	border-top: 1px solid #000;
+    border-left: 1px solid #000;
+	
 }
 .item_block{
-	width: 33%;
-	border:1px  solid #140303;
-}
-.col{
-	align-items: stretch;
-	padding: 5px;
-	vertical-align: top;
-	border:1px  solid #DDD;
-}
-
-.hyoshi_tittle{
 	display: flex;
 	flex-wrap: wrap;
+	width: 33.333%;
+	/* border:1px  solid #140303; */
+	flex-direction: column;
+}
+
+.hyoshi_count{
+	display: flex;
+		box-sizing: border-box;
+	    border-right: 1px solid #000;
+    	border-bottom: 1px solid #000;
+	flex-wrap: wrap;
 	width:100%;
-	align-items: stretch;
+	/* align-items: stretch; */
+	/* align-items: flex-end; */
 }
 	.hyoshi{
-		width: 100%;
-		height: 38vw;
+		display: flex;
 		position: relative;
+		width: 100%;
+		aspect-ratio: 21/30;
+		/* height: calc(width*1.5); */
 	}
 	.hyoshi>img{
 		display: flex;
 		width: 100%;
+		/* aspect-ratio: 21/30; */
 		object-fit: contain;
 	}
 	.hyoshi>.count{
-		display: flex;
+		display: none;
+		/* display: flex; */
 		position: absolute;
 		width: 100%;
 		height: 100%;
 		top:0;
 		left:0;
-		background-color: burlywood;
-		opacity: 0.5;
+		background-color: #FFF;
+		opacity: 0.7;
 	}
 	.hyoshi>.count_num{
+		display: none;
+		/* display: flex; */
 		position: absolute;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%,-50%);
-		font-size: max(calc(300% + 0.5vw),16px);
+		font-size: max(calc(150% + 1.5vw),16px);
+		background-color: #666;
+		color: #FFF;
+		padding: 0px 15px 5px 15px;
 	}
 	
-	.title{
-		width: 100%;
-		text-align: center;
-		font-size: max(calc(50% + 0.5vw),16px);
-
-	}
+.title{
+	display: flex;
+	flex-grow: 1;
+	width: 100%;
+	/* height:60px; */
+	/* text-align: center; */
+	justify-content: space-around;
+	font-size: max(calc(50% + 0.5vw),16px);
+		box-sizing: border-box;
+		border-right: 1px solid #000;
+}
+.price_button{
+	display: flex;
+	/* align-self: flex-end; */
+	flex-wrap: wrap;
+	width:100%;
+		box-sizing: border-box;
+		border-right: 1px solid #000;
+		border-bottom: 1px solid #000;
+}
 	.price{
+		display: flex;
+		/* align-items: flex-end; */
 		width: 100%;
-		text-align: center;
+		/* text-align: center; */
+		justify-content: space-around;
+		/* align-self: flex-end; */
 		font-size: max(calc(50% + 0.5vw),16px);
-
 	}
 	.count_pm{
+		display: flex;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		display: flex;
 		width:100%;
 		background-color: #DDD;
-		align-items: center;
 	}
 	.button_p{
 		width: 30%;
@@ -116,6 +145,9 @@ h6{
 		width: 100%;
 		height: 100%;
 		text-align: center;
+		/* display: flex; */
+		/* align-items: flex-end; */
+
 	}
 		.button_m>button,.button_p>button{
 			/*display: block;*/
@@ -132,7 +164,11 @@ h6{
 <!-----HTML---------------------------------------------------------------->
 <body>
 <div class="h1">合計金額：<span id="result">0</span>円</div>
-<!--<h6>※セット割引：-<span id="result_discount">0</span>円</h6>-->
+<div class="h6">（お釣り例）</div>
+　　<span id="azukari3">1,000</span>円　⇒　<span id="otsuri3">0</span>円<br>
+　　<span id="azukari3_2">1,000</span>円　⇒　<span id="otsuri3_2">0</span>円<br>
+　　<span id="azukari2">5,000</span>円　⇒　<span id="otsuri2">0</span>円<br>
+　　<span id="azukari1">10,000</span>円　⇒　<span id="otsuri1">0</span>円<br>
 <br>
 <button class="button_r" onclick="reset();">リセット</button><br><br>
 
@@ -140,13 +176,15 @@ h6{
 	<div class="row">
 
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus1">
 					<img src="./img2025/hangesyo7.jpg" alt="半夏生の本7の表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty1">0</div>
 				</div>
-				<div class="title">半夏生の本 7</div>
+			</div>
+			<div class="title">半夏生の本 7</div>
+			<div class="price_button">
 				<div class="price">600円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus1">減らす</button></div>
@@ -155,13 +193,15 @@ h6{
 		</div>
 
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus2">
 					<img src="./img2025/hangesyo6.jpg" alt="半夏生の本6の表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty2">0</div>
 				</div>
-				<div class="title">半夏生の本 6</div>
+			</div>
+			<div class="title">半夏生の本 6</div>
+			<div class="price_button">
 				<div class="price">500円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus2">減らす</button></div>
@@ -170,13 +210,15 @@ h6{
 		</div>
 
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus3">
 					<img src="./img2025/hangesyo5.jpg" alt="半夏生の本5の表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty3">0</div>
 				</div>
-				<div class="title" >半夏生の本 5</div>
+			</div>
+			<div class="title" >半夏生の本 5</div>
+			<div class="price_button">
 				<div class="price" >300円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus3">減らす</button></div>
@@ -187,13 +229,15 @@ h6{
 	</div>
 	<div class="row">
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus4">
 					<img src="./img2025/hangesyo4.jpg" alt="半夏生の本4の表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty4">0</div>
 				</div>
-				<div class="title">半夏生の本 4</div>
+			</div>
+			<div class="title">半夏生の本 4</div>
+			<div class="price_button">
 				<div class="price">300円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus4">減らす</button></div>
@@ -201,13 +245,15 @@ h6{
 			</div>
 		</div>
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus5">
 					<img src="./img2025/kikiyumegatari.jpg" alt="キキユメガタリの表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty5">0</div>
 				</div>
-				<div class="title">キキユメガタリ</div>
+			</div>
+			<div class="title">キキユメガタリ</div>
+			<div class="price_button">
 				<div class="price">800円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus5">減らす</button></div>
@@ -215,13 +261,15 @@ h6{
 			</div>
 		</div>
 		<div class="item_block">
-			<div class="hyoshi_tittle">
+			<div class="hyoshi_count">
 				<div class="hyoshi" id="plus6">
 					<img src="./img2025/utsutsugoya.jpg" alt="現五夜の表紙">
 					<div class="count"></div>
 					<div class="count_num" id="Qty6">0</div>	
 				</div>
-				<div class="title">現五夜</div>
+			</div>
+			<div class="title">現五夜</div>
+			<div class="price_button">
 				<div class="price">700円</div>
 				<div class="count_pm">
 					<div class="button_m"><button id="minus6">減らす</button></div>
@@ -239,7 +287,10 @@ h6{
 
 //計算結果--------------
 var result = document.getElementById("result");
-var result_discount = document.getElementById("result_discount");
+var azukari = document.getElementById("azukari");
+var total = 0;
+var oturi = document.getElementById("otsuri");
+var otsuri_sub = 0;
 
 function result_calc(){
 	price1 = 600 * Count1;
@@ -248,18 +299,64 @@ function result_calc(){
 	price4 = 300 * Count4;
 	price5 = 800 * Count5;
 	price6 = 700 * Count6;
-	discount = 0;
-	/*
-	if(Count1>0 && Count2>0){
-		if(Count1 >= Count2){
-			discount = Count2 * 100;
-		}else{
-			discount = Count1 * 100;
-		}
+	total = price1+price2+price3+price4+price5+price6;
+	if(total%1000 < 500){
+		otsuri_sub = total%1000;
+	}else{
+		otsuri_sub = total%1000 -500;
 	}
-	*/
-	result.innerHTML = price1+price2+price3+price4+price5+price6-discount;
-	result_discount.innerHTML = discount;
+	
+	result.innerHTML = price1+price2+price3+price4+price5+price6;//-discount;
+	otsuri1.innerHTML = 10000-total;
+	otsuri2.innerHTML = 5000-total;
+	azukari3.innerHTML = (Math.floor(total/1000) +1)*1000;
+	otsuri3.innerHTML = ((Math.floor(total/1000) +1)*1000) - total;
+	azukari3_2.innerHTML = (Math.floor(total/1000) +1)*1000+otsuri_sub;
+	otsuri3_2.innerHTML = ((Math.floor(total/1000) +1)*1000)+otsuri_sub - total;
+
+	if(Count1>0){
+		document.querySelector("#plus1 > div.count").style.display = 'flex';
+		document.querySelector("#plus1 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus1 > div.count").style.display = 'none';
+		document.querySelector("#plus1 > div.count_num").style.display = 'none';
+	}
+	if(Count2>0){
+		document.querySelector("#plus2 > div.count").style.display = 'flex';
+		document.querySelector("#plus2 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus2 > div.count").style.display = 'none';
+		document.querySelector("#plus2 > div.count_num").style.display = 'none';
+	}
+	if(Count3>0){
+		document.querySelector("#plus3 > div.count").style.display = 'flex';
+		document.querySelector("#plus3 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus3 > div.count").style.display = 'none';
+		document.querySelector("#plus3 > div.count_num").style.display = 'none';
+	}
+	if(Count4>0){
+		document.querySelector("#plus4 > div.count").style.display = 'flex';
+		document.querySelector("#plus4 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus4 > div.count").style.display = 'none';
+		document.querySelector("#plus4 > div.count_num").style.display = 'none';
+	}
+	if(Count5>0){
+		document.querySelector("#plus5 > div.count").style.display = 'flex';
+		document.querySelector("#plus5 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus5 > div.count").style.display = 'none';
+		document.querySelector("#plus5 > div.count_num").style.display = 'none';
+	}
+	if(Count6>0){
+		document.querySelector("#plus6 > div.count").style.display = 'flex';
+		document.querySelector("#plus6 > div.count_num").style.display = 'flex';
+	}else{
+		document.querySelector("#plus6 > div.count").style.display = 'none';
+		document.querySelector("#plus6 > div.count_num").style.display = 'none';
+	}
+
 }
 
 
