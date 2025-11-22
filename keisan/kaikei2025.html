@@ -24,10 +24,24 @@ body{
 
 .h1{
 	margin-bottom: 10px;
-	font-size: max(calc(150% + 0.5vw),16px);
+	font-size: max(calc(150% + 1vw),16px);
 }
 .h6{
 	margin-top:10px;
+	font-size: min(calc(50% + 1vw),16px);
+}
+.h6>div>.li{
+	margin-left: 30px;
+	width: 50%;
+	display: grid;
+	text-align: right;
+	grid-template-columns: repeat(4,1fr);
+	/* grid-auto-columns: min-content; */
+	grid-auto-columns: auto;
+}
+.h6>.div>.li>div{
+	/* width:10%; */
+	/* width: auto; */
 }
 .button_r{
 	width:100%;
@@ -41,7 +55,7 @@ body{
 .row{
 	display: flex;
 	width: 100%;
-	margin-bottom: 30px;
+	margin-bottom: 15px;
 	border-top: 1px solid #000;
     border-left: 1px solid #000;
 	
@@ -164,11 +178,19 @@ body{
 <!-----HTML---------------------------------------------------------------->
 <body>
 <div class="h1">合計金額：<span id="result">0</span>円</div>
-<div class="h6">（お釣り例）</div>
-　　<span id="azukari3">1,000</span>円　⇒　<span id="otsuri3">0</span>円<br>
-　　<span id="azukari3_2">1,000</span>円　⇒　<span id="otsuri3_2">0</span>円<br>
-　　<span id="azukari2">5,000</span>円　⇒　<span id="otsuri2">0</span>円<br>
-　　<span id="azukari1">10,000</span>円　⇒　<span id="otsuri1">0</span>円<br>
+<div class="h6">（お釣り例）
+	<div>
+		<div class="li">
+			<div id="azukari3">1,000</div>
+			<div>円　⇒　</div>
+			<div id="otsuri3">0</div>
+			<div>円</div>
+		</div>
+		<div class="li"><div id="azukari3_2">1,000</div><div>円　⇒　</div><div id="otsuri3_2">0</div><div>円</div></div>
+		<div class="li"><div id="azukari2">5,000</div><div>円　⇒　</div><div id="otsuri2">0</div><div>円</div></div>
+		<div class="li"><div id="azukari1">10,000</div><div>円　⇒　</div><div id="otsuri1">0</div><div>円</div></div>
+	</div>
+</div>
 <br>
 <button class="button_r" onclick="reset();">リセット</button><br><br>
 
@@ -307,12 +329,12 @@ function result_calc(){
 	}
 	
 	result.innerHTML = price1+price2+price3+price4+price5+price6;//-discount;
-	otsuri1.innerHTML = 10000-total;
-	otsuri2.innerHTML = 5000-total;
-	azukari3.innerHTML = (Math.floor(total/1000) +1)*1000;
-	otsuri3.innerHTML = ((Math.floor(total/1000) +1)*1000) - total;
-	azukari3_2.innerHTML = (Math.floor(total/1000) +1)*1000+otsuri_sub;
-	otsuri3_2.innerHTML = ((Math.floor(total/1000) +1)*1000)+otsuri_sub - total;
+	otsuri1.innerHTML = (10000-total).toLocaleString();
+	otsuri2.innerHTML = (5000-total).toLocaleString();
+	azukari3.innerHTML = ((Math.floor(total/1000) +1)*1000).toLocaleString();
+	otsuri3.innerHTML = (((Math.floor(total/1000) +1)*1000) - total).toLocaleString();
+	azukari3_2.innerHTML = ((Math.floor(total/1000) +1)*1000+otsuri_sub).toLocaleString();
+	otsuri3_2.innerHTML = (((Math.floor(total/1000) +1)*1000)+otsuri_sub - total).toLocaleString();
 
 	if(Count1>0){
 		document.querySelector("#plus1 > div.count").style.display = 'flex';
